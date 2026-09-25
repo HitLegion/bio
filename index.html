@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ALEX // CYBER BIO & LIVE STATUS</title>
+  <title>HITLEGION // CYBER BIO & LIVE STATUS</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,7 +12,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
-  <!-- Официальный SDK Supabase -->
+  <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
@@ -154,12 +154,11 @@
     <div id="desktop-indicator-pill" class="flex items-center gap-2.5 text-xs font-mono px-3.5 py-1.5 rounded-full border transition duration-300 bg-slate-900/70 border-slate-700 text-slate-400">
       <span id="desktop-status-dot" class="inline-block w-2.5 h-2.5 rounded-full bg-slate-500"></span>
       <i id="desktop-status-icon" class="fa-solid fa-desktop"></i>
-      <span id="desktop-status-text" class="font-bold tracking-wide">ПОДКЛЮЧЕНИЕ К ПК...</span>
+      <span id="desktop-status-text" class="font-bold tracking-wide">НЕ В СЕТИ (ПК ВЫКЛЮЧЕН)</span>
     </div>
 
     <!-- Right Controls -->
     <div class="flex items-center gap-2">
-      <!-- GLOBAL VIEWS COUNTER FROM SUPABASE -->
       <div class="px-3 py-1.5 rounded-full text-xs font-mono border border-cyan-500/30 bg-cyan-950/30 text-neonCyan flex items-center gap-2 shadow-[0_0_15px_-4px_rgba(0,243,255,0.25)]">
         <i class="fa-solid fa-eye text-[11px] animate-pulse"></i>
         <span>ПРОСМОТРЫ:</span>
@@ -188,7 +187,7 @@
         <div class="relative group">
           <div id="avatar-glow-ring" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl p-1 bg-gradient-to-tr from-slate-700 via-slate-800 to-slate-900 transition-all duration-500">
             <div class="w-full h-full bg-[#0d101a] rounded-xl flex items-center justify-center overflow-hidden border border-white/10">
-              <img id="user-avatar" src="https://placehold.co/150x150/090b10/00f3ff?text=DISCORD" alt="Avatar" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+              <img id="user-avatar" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300&auto=format&fit=crop&q=80" alt="Avatar" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
             </div>
           </div>
           <div id="avatar-status-badge" class="absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-black/90 border border-slate-700 text-slate-400 text-[10px] font-mono px-2.5 py-0.5 rounded-full flex items-center gap-1.5 whitespace-nowrap shadow-md">
@@ -451,11 +450,13 @@
   <script>
     const MY_DISCORD_ID = "522679452447277056";
 
-    /* ТВОИ ВШИТЫЕ КЛЮЧИ SUPABASE */
     const SUPABASE_URL = "https://qctfajmwkrhqsehxaxon.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFjdGZham13a3JocXNlaHhheG9uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzMzc5ODQsImV4cCI6MjEwNTkxMzk4NH0.i1H9U8UESsc9DMdfo2C3wnlAotnSwbarWpGN9vVmIeg";
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    let supabase = null;
+    try {
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } catch(e) {}
 
     let sfxEnabled = true;
     let audioCtx = null;
@@ -548,33 +549,25 @@
       }
     }
 
-    /* =========================================================================
-       СИНХРОНИЗАЦИЯ БАЗЫ SUPABASE
-       ========================================================================= */
+    /* SUPABASE STATS */
     async function initStats() {
+      if (!supabase) return;
       try {
-        // 1. Получаем текущие данные из Supabase
-        const { data, error } = await supabase.from('stats').select('views, hearts').eq('id', 'main').single();
-        
-        let currentViews = (data && typeof data.views === 'number') ? data.views : 0;
-        let currentHearts = (data && typeof data.hearts === 'number') ? data.hearts : 0;
-
-        // 2. Проверяем уникальность визита за сессию
         const sessionCounted = sessionStorage.getItem('hitlegion_view_counted');
         if (!sessionCounted) {
           sessionStorage.setItem('hitlegion_view_counted', 'true');
-          currentViews += 1;
-          await supabase.from('stats').update({ views: currentViews }).eq('id', 'main');
+          await supabase.rpc('increment_views').catch(() => {});
         }
 
-        totalViews = currentViews;
-        totalHearts = currentHearts;
-
-        document.getElementById('global-views-count').textContent = Number(totalViews).toLocaleString('ru-RU');
-        document.getElementById('heart-counter').textContent = Number(totalHearts).toLocaleString('ru-RU');
-
+        const { data, error } = await supabase.from('stats').select('views, hearts').eq('id', 'main').single();
+        if (data) {
+          totalViews = data.views || 0;
+          totalHearts = data.hearts || 0;
+          document.getElementById('global-views-count').textContent = Number(totalViews).toLocaleString('ru-RU');
+          document.getElementById('heart-counter').textContent = Number(totalHearts).toLocaleString('ru-RU');
+        }
       } catch (err) {
-        console.error("Ошибка загрузки Supabase:", err);
+        console.warn("Supabase fetch fallback:", err);
       }
     }
 
@@ -675,11 +668,12 @@
       playHeartChime();
       showToast("Твое сердце принято! Спасибо за поддержку ❤️", true);
 
-      // Синхронизация с Supabase
-      try {
-        await supabase.from('stats').update({ hearts: totalHearts }).eq('id', 'main');
-      } catch (e) {
-        console.error("Ошибка сохранения лайка в Supabase:", e);
+      if (supabase) {
+        try {
+          await supabase.rpc('increment_hearts').catch(async () => {
+            await supabase.from('stats').update({ hearts: totalHearts }).eq('id', 'main');
+          });
+        } catch (e) {}
       }
     }
 
@@ -789,7 +783,7 @@
       }
     }, 1000);
 
-    /* LANYARD DISCORD REAL-TIME */
+    /* LANYARD REAL-TIME */
     function handleLanyardData(data) {
       if (!data) return;
 
@@ -844,23 +838,25 @@
         lanyardSocket = new WebSocket('wss://api.lanyard.rest/socket');
 
         lanyardSocket.onmessage = (event) => {
-          const msg = JSON.parse(event.data);
-          const { op, d } = msg;
+          try {
+            const msg = JSON.parse(event.data);
+            const { op, d } = msg;
 
-          if (op === 1) {
-            heartbeatTimer = setInterval(() => {
-              if (lanyardSocket && lanyardSocket.readyState === WebSocket.OPEN) {
-                lanyardSocket.send(JSON.stringify({ op: 3 }));
-              }
-            }, d.heartbeat_interval);
+            if (op === 1) {
+              heartbeatTimer = setInterval(() => {
+                if (lanyardSocket && lanyardSocket.readyState === WebSocket.OPEN) {
+                  lanyardSocket.send(JSON.stringify({ op: 3 }));
+                }
+              }, d.heartbeat_interval);
 
-            lanyardSocket.send(JSON.stringify({
-              op: 2,
-              d: { subscribe_to_id: MY_DISCORD_ID }
-            }));
-          }
+              lanyardSocket.send(JSON.stringify({
+                op: 2,
+                d: { subscribe_to_id: MY_DISCORD_ID }
+              }));
+            }
 
-          if (op === 0) handleLanyardData(d);
+            if (op === 0) handleLanyardData(d);
+          } catch(e){}
         };
 
         lanyardSocket.onerror = () => pollLanyardRest();
@@ -874,8 +870,14 @@
       try {
         const res = await fetch(`https://api.lanyard.rest/v1/users/${MY_DISCORD_ID}`);
         const json = await res.json();
-        if (json.success && json.data) handleLanyardData(json.data);
-      } catch (e) {}
+        if (json.success && json.data) {
+          handleLanyardData(json.data);
+        } else {
+          updatePcStatusDisplay(false);
+        }
+      } catch (e) {
+        updatePcStatusDisplay(false);
+      }
     }
 
     window.onload = function() {

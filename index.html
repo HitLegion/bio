@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALEX // CYBER BIO & LIVE STATUS</title>
+  
+  <!-- Google Fonts: Orbitron, Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@600;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Canvas Confetti for Heart Bursts -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+            cyber: ['Orbitron', 'sans-serif'],
+          },
+          colors: {
+            cyberDark: '#07090e',
+            neonCyan: '#00f3ff',
+            neonPink: '#ff007f',
+            neonPurple: '#a855f7',
+            neonGreen: '#22c55e',
+            neonRed: '#ff2a55',
+            spotifyGreen: '#1ed760',
+            discordBlurple: '#5865F2',
+          },
+          boxShadow: {
+            'neon-cyan': '0 0 25px -4px rgba(0, 243, 255, 0.4)',
+            'neon-pink': '0 0 25px -4px rgba(255, 0, 127, 0.4)',
+            'neon-heart': '0 0 28px -2px rgba(255, 42, 85, 0.55)',
+            'neon-green': '0 0 25px -4px rgba(34, 197, 94, 0.4)',
+            'spotify': '0 0 25px -5px rgba(30, 215, 96, 0.3)',
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #06070b;
+      color: #e2e8f0;
+      overflow-x: hidden;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Ambient background gradient meshes */
+    .ambient-glow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .blob-1 {
+      position: absolute;
+      top: -10%;
+      left: 15%;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, rgba(0, 243, 255, 0.12) 0%, rgba(0,0,0,0) 70%);
+      filter: blur(80px);
+      animation: float1 14s infinite alternate ease-in-out;
+    }
+    .blob-2 {
+      position: absolute;
+      bottom: -10%;
+      right: 15%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255, 0, 127, 0.1) 0%, rgba(0,0,0,0) 70%);
+      filter: blur(90px);
+      animation: float2 18s infinite alternate ease-in-out;
+    }
+
+    @keyframes float1 {
+      0% { transform: translate(0px, 0px) scale(1); }
+      100% { transform: translate(40px, 30px) scale(1.08); }
+    }
+    @keyframes float2 {
+      0% { transform: translate(0px, 0px) scale(1); }
+      100% { transform: translate(-30px, -30px) scale(1.1); }
+    }
+
+    /* Bento Card Glass Effect */
+    .bento-card {
+      background: rgba(13, 16, 24, 0.74);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .bento-card:hover {
+      border-color: rgba(0, 243, 255, 0.25);
+      box-shadow: 0 12px 30px -10px rgba(0, 243, 255, 0.14);
+    }
+
+    .cyber-grid {
+      background-size: 38px 38px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    }
+
+    /* Toast animation */
+    #toast {
+      transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28), opacity 0.3s ease;
+    }
+
+    /* Equalizer wave bars */
+    @keyframes eqWave {
+      0%, 100% { height: 4px; }
+      50% { height: 18px; }
+    }
+    .eq-bar-1 { animation: eqWave 1.1s ease-in-out infinite; }
+    .eq-bar-2 { animation: eqWave 0.8s ease-in-out infinite 0.2s; }
+    .eq-bar-3 { animation: eqWave 1.3s ease-in-out infinite 0.4s; }
+    .eq-bar-4 { animation: eqWave 0.9s ease-in-out infinite 0.1s; }
+
+    /* Flying heart burst */
+    @keyframes floatHeartUp {
+      0% {
+        transform: translateY(0) scale(0.7);
+        opacity: 1;
+      }
+      50% {
+        transform: translateY(-40px) scale(1.3) rotate(-12deg);
+        opacity: 0.9;
+      }
+      100% {
+        transform: translateY(-90px) scale(1.6) rotate(16deg);
+        opacity: 0;
+      }
+    }
+    .floating-heart {
+      position: absolute;
+      pointer-events: none;
+      animation: floatHeartUp 1.2s forwards cubic-bezier(0.2, 0.8, 0.3, 1);
+      z-index: 50;
+      color: #ff2a55;
+      filter: drop-shadow(0 0 10px #ff0055);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen cyber-grid flex flex-col items-center justify-start p-4 sm:p-6 lg:p-10 relative selection:bg-neonCyan selection:text-black">
+  <div class="ambient-glow">
+    <div class="blob-1"></div>
+    <div class="blob-2"></div>
+  </div>
+
+  <!-- Header: Live PC indicator, Global Views & SFX Toggle -->
+  <header class="w-full max-w-5xl flex flex-wrap justify-between items-center z-10 mb-6 gap-3">
+    <!-- Live Desktop Online/Offline Badge -->
+    <div id="desktop-indicator-pill" class="flex items-center gap-2.5 text-xs font-mono px-3.5 py-1.5 rounded-full border transition duration-300 bg-slate-900/70 border-slate-700 text-slate-400">
+      <span id="desktop-status-dot" class="inline-block w-2.5 h-2.5 rounded-full bg-slate-500"></span>
+      <i id="desktop-status-icon" class="fa-solid fa-desktop"></i>
+      <span id="desktop-status-text" class="font-bold tracking-wide">ПОДКЛЮЧЕНИЕ К ПК...</span>
+    </div>
+
+    <!-- Right Controls: Live Total Views, Lanyard server, SFX -->
+    <div class="flex items-center gap-2">
+      <!-- REAL TOTAL VIEWS COUNTER (Starts from 0, stored in DB) -->
+      <div class="px-3 py-1.5 rounded-full text-xs font-mono border border-cyan-500/30 bg-cyan-950/30 text-neonCyan flex items-center gap-2 shadow-[0_0_15px_-4px_rgba(0,243,255,0.25)]">
+        <i class="fa-solid fa-eye text-[11px] animate-pulse"></i>
+        <span>ПРОСМОТРЫ:</span>
+        <span id="global-views-count" class="font-bold text-white tracking-wider">0</span>
+      </div>
+
+      <!-- Lanyard Discord Server Info -->
+      <a href="https://discord.gg/lanyard" target="_blank" title="Чтобы бот транслировал ПК онлайн, аккаунт должен состоять на сервере Lanyard" class="hidden sm:flex px-3 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900/80 hover:border-discordBlurple text-slate-400 hover:text-slate-200 transition items-center gap-1.5">
+        <i class="fa-brands fa-discord text-discordBlurple text-sm"></i>
+        <span>Lanyard Sync</span>
+        <i class="fa-solid fa-arrow-up-right-from-square text-[9px] text-slate-500"></i>
+      </a>
+
+      <!-- SFX Toggle -->
+      <button id="sfx-toggle" onclick="toggleAudio()" class="px-3 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900/80 hover:border-neonCyan transition flex items-center gap-2 text-slate-300">
+        <i id="sfx-icon" class="fa-solid fa-volume-high text-neonCyan"></i>
+        <span id="sfx-status" class="hidden md:inline">SFX: ON</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Bento Grid Container -->
+  <main class="w-full max-w-5xl z-10 flex flex-col gap-6">
+
+    <!-- Top Bento: Profile & Real Daily Heart Card -->
+    <div class="bento-card rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 border-l-4 border-l-neonCyan shadow-neon-cyan relative">
+      <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
+        <!-- Avatar with neon glow & Real-time Discord Status Ring -->
+        <div class="relative group">
+          <div id="avatar-glow-ring" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl p-1 bg-gradient-to-tr from-slate-700 via-slate-800 to-slate-900 transition-all duration-500">
+            <div class="w-full h-full bg-[#0d101a] rounded-xl flex items-center justify-center overflow-hidden border border-white/10">
+              <img id="user-avatar" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300&auto=format&fit=crop&q=80" alt="Avatar" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/150x150/090b10/00f3ff?text=AVATAR'">
+            </div>
+          </div>
+          <!-- Real-time Discord Status Dot on Avatar -->
+          <div id="avatar-status-badge" class="absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-black/90 border border-slate-700 text-slate-400 text-[10px] font-mono px-2.5 py-0.5 rounded-full flex items-center gap-1.5 whitespace-nowrap shadow-md">
+            <span id="avatar-status-indicator" class="w-2 h-2 rounded-full bg-slate-600"></span>
+            <span id="avatar-status-text">OFFLINE</span>
+          </div>
+        </div>
+
+        <div class="mt-2 sm:mt-0">
+          <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-1">
+            <h1 id="user-name" class="text-2xl sm:text-3xl font-black font-cyber tracking-wider text-white">
+              ALEX <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonCyan to-neonPink">// NEOCLICK</span>
+            </h1>
+            <span class="bg-purple-950/60 text-neonPurple border border-purple-800/50 text-[10px] font-mono font-bold px-2 py-0.5 rounded uppercase">LVL. 99</span>
+          </div>
+          <p id="user-bio" class="text-slate-400 text-sm max-w-md">
+            Слушаю музыку на репите, играю в катки с друзьями и собираю крутые интерфейсы.
+          </p>
+
+          <!-- Quick Copy Contacts (Telegram, Discord, Steam) -->
+          <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-4">
+            <button onclick="copyData('@alex_tg', 'Telegram')" class="group px-3 py-1.5 rounded-lg bg-slate-900/80 hover:bg-cyan-950/50 border border-slate-700 hover:border-neonCyan text-xs font-mono text-slate-300 hover:text-white transition flex items-center gap-2">
+              <i class="fa-brands fa-telegram text-sky-400"></i>
+              <span>@alex_tg</span>
+              <i class="fa-regular fa-copy text-slate-500 group-hover:text-neonCyan text-[11px]"></i>
+            </button>
+
+            <button onclick="copyData('522679452447277056', 'Discord ID')" class="group px-3 py-1.5 rounded-lg bg-slate-900/80 hover:bg-purple-950/50 border border-slate-700 hover:border-neonPurple text-xs font-mono text-slate-300 hover:text-white transition flex items-center gap-2">
+              <i class="fa-brands fa-discord text-discordBlurple"></i>
+              <span id="discord-tag-display">discord.id/522679452447277056</span>
+              <i class="fa-regular fa-copy text-slate-500 group-hover:text-neonPurple text-[11px]"></i>
+            </button>
+
+            <button onclick="copyData('steamcommunity.com/id/gamer_alex', 'Steam')" class="group px-3 py-1.5 rounded-lg bg-slate-900/80 hover:bg-slate-800 border border-slate-700 hover:border-slate-400 text-xs font-mono text-slate-300 hover:text-white transition flex items-center gap-2">
+              <i class="fa-brands fa-steam text-slate-300"></i>
+              <span>Steam</span>
+              <i class="fa-regular fa-copy text-slate-500 text-[11px]"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DAILY HEART WIDGET (STRICT 1 HEART PER PERSON / PER IP / PER DAY) -->
+      <div id="heart-widget-area" class="relative flex flex-col items-center justify-center gap-2 w-full md:w-60 pt-4 md:pt-0 border-t md:border-t-0 border-slate-800">
+        <button id="heart-btn" onclick="sendDailyHeart(event)" class="relative w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-neonRed/20 via-pink-950/40 to-purple-900/30 border border-neonRed/40 hover:border-neonRed text-white font-cyber text-xs tracking-wider flex items-center justify-center gap-2.5 hover:shadow-neon-heart transition-all duration-300 group active:scale-95">
+          <i id="heart-icon" class="fa-solid fa-heart text-neonRed text-base transition-transform group-hover:scale-125 duration-300"></i>
+          <span id="heart-btn-text">ОТДАТЬ СЕРДЦЕ</span>
+          <!-- REAL HEARTS COUNTER STARTING FROM 0 IN DATABASE -->
+          <span id="heart-counter" class="bg-black/70 border border-neonRed/40 px-2.5 py-0.5 rounded text-neonRed font-mono font-bold text-xs shadow-inner">
+            0
+          </span>
+        </button>
+
+        <!-- Cooldown / Anti-Cheat Status Subtext -->
+        <div id="heart-subtext" class="text-[11px] font-mono text-center text-slate-400 transition-colors flex items-center gap-1.5">
+          <i class="fa-solid fa-shield-halved text-[10px] text-neonRed"></i>
+          <span id="heart-status-message">1 сердце в день с одного IP</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bento Grid Row 2: Live Spotify & Hardware Rig -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- Bento: REAL-TIME DISCORD SPOTIFY STATUS (2 columns) -->
+      <div id="spotify-card" class="bento-card rounded-2xl p-6 md:col-span-2 flex flex-col justify-between border-l-4 border-l-spotifyGreen relative overflow-hidden group shadow-spotify">
+        <!-- Background subtle glow based on Spotify green -->
+        <div class="absolute -right-16 -top-16 w-48 h-48 bg-spotifyGreen/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div>
+          <!-- Header with Discord style "СЛУШАЕТ SPOTIFY" & Equalizer -->
+          <div class="flex justify-between items-center mb-4">
+            <div class="flex items-center gap-2">
+              <i class="fa-brands fa-spotify text-spotifyGreen text-xl animate-pulse"></i>
+              <span class="text-xs font-mono font-bold tracking-wider text-spotifyGreen uppercase">СЛУШАЕТ НА SPOTIFY</span>
+            </div>
+            
+            <div id="spotify-eq" class="flex items-end gap-1 h-5 opacity-20">
+              <span class="w-1 bg-spotifyGreen rounded-full eq-bar-1 h-2"></span>
+              <span class="w-1 bg-spotifyGreen rounded-full eq-bar-2 h-4"></span>
+              <span class="w-1 bg-spotifyGreen rounded-full eq-bar-3 h-5"></span>
+              <span class="w-1 bg-spotifyGreen rounded-full eq-bar-4 h-3"></span>
+            </div>
+          </div>
+
+          <!-- Track Info Container -->
+          <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 my-2">
+            <!-- Album Cover -->
+            <div class="relative w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-black/60 border border-slate-700/70 flex-shrink-0 shadow-lg">
+              <img id="spotify-art" src="https://images.unsplash.com/photo-1614680376593-902f749f7ffc?w=300&auto=format&fit=crop&q=80" alt="Album Art" class="w-full h-full object-cover">
+              <div id="spotify-cover-overlay" class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                <i class="fa-brands fa-spotify text-spotifyGreen text-2xl"></i>
+              </div>
+            </div>
+
+            <!-- Titles & Artist -->
+            <div class="flex flex-col justify-center text-center sm:text-left flex-grow w-full overflow-hidden">
+              <h3 id="spotify-title" class="text-base sm:text-lg font-bold text-white truncate font-sans hover:text-spotifyGreen transition">
+                Ничего не играет
+              </h3>
+              <p id="spotify-artist" class="text-xs sm:text-sm text-slate-400 truncate font-mono mt-0.5">
+                Spotify на паузе
+              </p>
+              <p id="spotify-album" class="text-[11px] text-slate-500 truncate font-mono mt-1">
+                Включи трек на ПК, чтобы он появился здесь
+              </p>
+
+              <!-- Progress bar container (Synced with real playback) -->
+              <div id="spotify-progress-wrap" class="w-full mt-3 opacity-30 transition-opacity">
+                <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                  <div id="spotify-progress" class="bg-spotifyGreen h-full rounded-full transition-all duration-300" style="width: 0%;"></div>
+                </div>
+                <div class="flex justify-between items-center text-[10px] font-mono text-slate-400 mt-1">
+                  <span id="spotify-current-time">00:00</span>
+                  <span id="spotify-total-time">00:00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer of Spotify Card -->
+        <div class="mt-4 pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+          <div class="flex items-center gap-2 text-slate-400">
+            <span id="spotify-dot" class="w-2 h-2 rounded-full bg-slate-600"></span>
+            <span id="spotify-status-note">Ожидание Spotify активности...</span>
+          </div>
+          <a id="spotify-track-link" href="#" target="_blank" class="text-[11px] text-slate-500 hover:text-spotifyGreen transition hidden items-center gap-1">
+            <span>Открыть в Spotify</span>
+            <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Bento: PC Hardware Specs Rig (1 column) -->
+      <div class="bento-card rounded-2xl p-5 flex flex-col justify-between">
+        <div>
+          <div class="text-xs font-cyber tracking-wider text-neonPurple flex items-center justify-between mb-3">
+            <span class="flex items-center gap-2">
+              <i class="fa-solid fa-microchip"></i> МОЙ СЕЙЧАС СЕТАП
+            </span>
+            <span class="text-[10px] font-mono text-slate-500">RIG</span>
+          </div>
+
+          <ul class="space-y-2 text-xs font-mono">
+            <li class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900/60 border border-slate-800/70">
+              <span class="text-slate-400 flex items-center gap-1.5"><i class="fa-solid fa-brain text-purple-400"></i> Процессор</span>
+              <span class="text-slate-200 font-semibold">Ryzen 7 7800X3D</span>
+            </li>
+            <li class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900/60 border border-slate-800/70">
+              <span class="text-slate-400 flex items-center gap-1.5"><i class="fa-solid fa-vr-cardboard text-neonCyan"></i> Видеокарта</span>
+              <span class="text-slate-200 font-semibold">RTX 4070 Super</span>
+            </li>
+            <li class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900/60 border border-slate-800/70">
+              <span class="text-slate-400 flex items-center gap-1.5"><i class="fa-solid fa-memory text-neonPink"></i> ОЗУ</span>
+              <span class="text-slate-200 font-semibold">32GB DDR5 6000</span>
+            </li>
+            <li class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900/60 border border-slate-800/70">
+              <span class="text-slate-400 flex items-center gap-1.5"><i class="fa-solid fa-desktop text-emerald-400"></i> Монитор</span>
+              <span class="text-slate-200 font-semibold">2K 240Hz Fast-IPS</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="mt-3 pt-2 border-t border-slate-800/70 text-[11px] font-mono text-slate-400 flex justify-between items-center">
+          <span>Девайсы:</span>
+          <span class="text-slate-300">Wooting 60HE + Maya 4K</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bento Grid Row 3: Games Played & Activity -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- Bento: Games & Current Ranks (2 columns) -->
+      <div class="bento-card rounded-2xl p-5 md:col-span-2 flex flex-col justify-between">
+        <div>
+          <div class="flex justify-between items-center mb-4">
+            <span class="text-xs font-cyber tracking-wider text-neonCyan flex items-center gap-2">
+              <i class="fa-solid fa-gamepad"></i> ВО ЧТО ИГРАЮ СЕЙЧАС
+            </span>
+            <span class="text-[11px] font-mono text-slate-400 flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-neonCyan"></span> Актуальные игры
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <!-- Game 1 -->
+            <div class="bg-slate-900/70 p-3.5 rounded-xl border border-slate-800 hover:border-amber-500/50 transition">
+              <div class="flex items-center justify-between text-xs font-semibold text-white mb-1">
+                <span>Counter-Strike 2</span>
+                <span class="text-[10px] text-amber-400 font-mono">19,400</span>
+              </div>
+              <p class="text-[11px] text-slate-400 font-mono">Faceit 8 • Снайпер (AWP)</p>
+              <div class="w-full bg-slate-800 h-1.5 rounded-full mt-2.5 overflow-hidden">
+                <div class="bg-amber-400 h-full w-[88%]"></div>
+              </div>
+            </div>
+
+            <!-- Game 2 -->
+            <div class="bg-slate-900/70 p-3.5 rounded-xl border border-slate-800 hover:border-blue-500/50 transition">
+              <div class="flex items-center justify-between text-xs font-semibold text-white mb-1">
+                <span>GTA V / RP</span>
+                <span class="text-[10px] text-blue-400 font-mono">Majestic</span>
+              </div>
+              <p class="text-[11px] text-slate-400 font-mono">Дрифт клан • 900+ ч.</p>
+              <div class="w-full bg-slate-800 h-1.5 rounded-full mt-2.5 overflow-hidden">
+                <div class="bg-blue-400 h-full w-[72%]"></div>
+              </div>
+            </div>
+
+            <!-- Game 3 -->
+            <div class="bg-slate-900/70 p-3.5 rounded-xl border border-slate-800 hover:border-emerald-500/50 transition">
+              <div class="flex items-center justify-between text-xs font-semibold text-white mb-1">
+                <span>Minecraft</span>
+                <span class="text-[10px] text-emerald-400 font-mono">Техно-моды</span>
+              </div>
+              <p class="text-[11px] text-slate-400 font-mono">Create + Redstone</p>
+              <div class="w-full bg-slate-800 h-1.5 rounded-full mt-2.5 overflow-hidden">
+                <div class="bg-emerald-400 h-full w-[94%]"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono text-slate-400">
+          <span>Зовите в пати, если ПК включен!</span>
+          <span class="text-neonPink flex items-center gap-1.5 font-bold"><i class="fa-solid fa-headset"></i> Discord голос open</span>
+        </div>
+      </div>
+
+      <!-- Bento: Quick Skills & Interests (1 column) -->
+      <div class="bento-card rounded-2xl p-5 flex flex-col justify-between">
+        <div>
+          <div class="text-xs font-cyber tracking-wider text-neonGreen flex items-center gap-2 mb-3">
+            <i class="fa-solid fa-bolt"></i> ИНТЕРЕСЫ & СКИЛЛЫ
+          </div>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="px-2.5 py-1 rounded-md bg-cyan-950/40 border border-cyan-800/50 text-cyan-300 font-mono text-[11px]">Web Dev</span>
+            <span class="px-2.5 py-1 rounded-md bg-emerald-950/40 border border-emerald-800/50 text-emerald-300 font-mono text-[11px]">JavaScript</span>
+            <span class="px-2.5 py-1 rounded-md bg-purple-950/40 border border-purple-800/50 text-purple-300 font-mono text-[11px]">Python</span>
+            <span class="px-2.5 py-1 rounded-md bg-pink-950/40 border border-pink-800/50 text-pink-300 font-mono text-[11px]">Монтаж видео</span>
+            <span class="px-2.5 py-1 rounded-md bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[11px]">After Effects</span>
+            <span class="px-2.5 py-1 rounded-md bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[11px]">Дизайн UI</span>
+          </div>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono text-slate-400">
+          <span>Класс:</span>
+          <span class="text-white font-bold">10 «А»</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-2 mb-8 text-center text-xs font-mono text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-3 px-2">
+      <div>
+        <span>Alex Bio Hub • ПК статус и Spotify трекер через Discord Lanyard.</span>
+      </div>
+      <div class="flex items-center gap-4 text-sm">
+        <a href="#" onclick="copyData('https://github.com', 'GitHub'); return false;" class="hover:text-neonCyan transition"><i class="fa-brands fa-github"></i></a>
+        <a href="#" onclick="copyData('steamcommunity.com/id/gamer_alex', 'Steam'); return false;" class="hover:text-slate-300 transition"><i class="fa-brands fa-steam"></i></a>
+        <a href="#" onclick="copyData('@alex_tg', 'Telegram'); return false;" class="hover:text-sky-400 transition"><i class="fa-brands fa-telegram"></i></a>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 pointer-events-none bg-slate-900 border border-neonCyan text-white text-xs font-mono px-4 py-3 rounded-xl shadow-neon-cyan flex items-center gap-3">
+    <i class="fa-solid fa-circle-check text-neonCyan text-base"></i>
+    <span id="toast-message">Скопировано!</span>
+  </div>
+
+  <!-- FIREBASE CLOUD FIRESTORE INTEGRATION (REAL-WORLD PRODUCTION DEPLOYMENT) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    /* =========================================================================
+       FIREBASE CONFIGURATION
+       Перед выгрузкой на хостинг замени этот объект на свой из Firebase Console 
+       (Project Settings -> General -> Your apps -> Web config)
+       ========================================================================= */
+    const customFirebaseConfig = {
+      apiKey: "AIzaSyYOUR_API_KEY_HERE",
+      authDomain: "your-project-id.firebaseapp.com",
+      projectId: "your-project-id",
+      storageBucket: "your-project-id.appspot.com",
+      messagingSenderId: "123456789012",
+      appId: "1:123456789012:web:abcdef123456"
+    };
+
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'cyber-bio-alex-hub';
+    let db = null;
+    let auth = null;
+    let currentUser = null;
+
+    let finalConfig = null;
+    if (typeof __firebase_config !== 'undefined') {
+      try {
+        finalConfig = JSON.parse(__firebase_config);
+      } catch (e) {}
+    } else if (customFirebaseConfig.apiKey && !customFirebaseConfig.apiKey.includes("YOUR_API_KEY")) {
+      finalConfig = customFirebaseConfig;
+    }
+
+    if (finalConfig) {
+      try {
+        const app = initializeApp(finalConfig);
+        db = getFirestore(app);
+        auth = getAuth(app);
+
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
+        }
+        currentUser = auth.currentUser;
+      } catch (err) {
+        console.warn("Firestore initialization error:", err);
+      }
+    }
+
+    // Set up Real-time listener for public counters (Views & Hearts)
+    if (db && currentUser) {
+      const statsDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'stats', 'general');
+
+      onSnapshot(statsDocRef, (snap) => {
+        if (snap.exists()) {
+          const data = snap.data();
+          if (data) {
+            if (typeof data.views === 'number') {
+              window.updateViewsDisplay(data.views);
+            }
+            if (typeof data.hearts === 'number') {
+              window.updateHeartDisplay(data.hearts);
+            }
+          }
+        } else {
+          // Initialize zero document if clean
+          setDoc(statsDocRef, { views: 1, hearts: 0, createdAt: Date.now() }, { merge: true });
+        }
+      }, (err) => {
+        console.warn("Snapshot error:", err);
+      });
+    }
+
+    // EXPOSE FIREBASE LOGIC TO GLOBAL SCRIPT
+    window.dbRecordPageView = async function() {
+      if (!db || !currentUser) return;
+      try {
+        const statsDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'stats', 'general');
+        await updateDoc(statsDocRef, {
+          views: increment(1)
+        }).catch(async (e) => {
+          // If document doesn't exist yet, create with 1 view
+          await setDoc(statsDocRef, { views: 1, hearts: 0 }, { merge: true });
+        });
+      } catch (e) {
+        console.warn("Could not record page view:", e);
+      }
+    };
+
+    window.dbCheckVotedToday = async function(fingerprint, dayDate) {
+      if (!db || !currentUser) return false;
+      try {
+        const voteDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'heart_logs', `${fingerprint}_${dayDate}`);
+        const snap = await getDoc(voteDocRef);
+        return snap.exists();
+      } catch (e) {
+        return false;
+      }
+    };
+
+    window.dbSubmitDailyHeart = async function(fingerprint, dayDate) {
+      if (!db || !currentUser) return false;
+      try {
+        // 1. Record log for IP/Device + Date
+        const voteDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'heart_logs', `${fingerprint}_${dayDate}`);
+        await setDoc(voteDocRef, {
+          timestamp: Date.now(),
+          day: dayDate,
+          id: fingerprint
+        });
+
+        // 2. Atomically increment hearts in the general counter
+        const statsDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'stats', 'general');
+        await updateDoc(statsDocRef, {
+          hearts: increment(1)
+        }).catch(async () => {
+          await setDoc(statsDocRef, { hearts: 1, views: 1 }, { merge: true });
+        });
+
+        return true;
+      } catch (e) {
+        console.warn("Could not save heart to DB:", e);
+        return false;
+      }
+    };
+  </script>
+
+  <!-- Application Main Script -->
+  <script>
+    /* =========================================================================
+       1. HARDCODED DISCORD ID & STATE
+       ========================================================================= */
+    const MY_DISCORD_ID = "522679452447277056";
+
+    let sfxEnabled = true;
+    let audioCtx = null;
+    let activeSpotifyState = null;
+    let pcIsOnline = false;
+    let lanyardSocket = null;
+    let heartbeatTimer = null;
+
+    // Real counters starting strictly from 0
+    let totalViews = 0;
+    let totalHearts = 0;
+
+    // Daily Heart & Anti-Cheat State
+    let visitorIP = "loading";
+    let visitorFingerprint = "";
+    let hasVotedToday = false;
+    let countdownInterval = null;
+
+    /* =========================================================================
+       2. PROCEDURAL WEB AUDIO SFX
+       ========================================================================= */
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function playTone(freq, type = 'sine', duration = 0.08, gainVal = 0.15) {
+      if (!sfxEnabled) return;
+      try {
+        initAudio();
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function playHeartChime() {
+      if (!sfxEnabled) return;
+      try {
+        initAudio();
+        // Warm celebratory ascending chord (C5 - E5 - G5 - C6)
+        const notes = [523.25, 659.25, 783.99, 1046.50];
+        notes.forEach((freq, idx) => {
+          setTimeout(() => {
+            playTone(freq, 'triangle', 0.22, 0.18);
+          }, idx * 65);
+        });
+      } catch(e) {}
+    }
+
+    function toggleAudio() {
+      sfxEnabled = !sfxEnabled;
+      const statusText = document.getElementById('sfx-status');
+      const icon = document.getElementById('sfx-icon');
+      if (sfxEnabled) {
+        statusText.textContent = 'SFX: ON';
+        icon.className = 'fa-solid fa-volume-high text-neonCyan';
+        playTone(600, 'sine', 0.1);
+      } else {
+        statusText.textContent = 'SFX: OFF';
+        icon.className = 'fa-solid fa-volume-xmark text-slate-500';
+      }
+    }
+
+    /* =========================================================================
+       3. TOAST & NOTIFICATIONS
+       ========================================================================= */
+    function showToast(text, isHeart = false) {
+      const toast = document.getElementById('toast');
+      const msg = document.getElementById('toast-message');
+      msg.textContent = text;
+      
+      const icon = toast.querySelector('i');
+      if (isHeart) {
+        icon.className = 'fa-solid fa-heart text-neonRed text-base animate-bounce';
+        toast.className = 'fixed bottom-6 right-6 z-50 transform translate-y-0 opacity-100 bg-slate-900 border border-neonRed text-white text-xs font-mono px-4 py-3 rounded-xl shadow-neon-heart flex items-center gap-3 transition-all duration-300';
+      } else {
+        icon.className = 'fa-solid fa-circle-check text-neonCyan text-base';
+        toast.className = 'fixed bottom-6 right-6 z-50 transform translate-y-0 opacity-100 bg-slate-900 border border-neonCyan text-white text-xs font-mono px-4 py-3 rounded-xl shadow-neon-cyan flex items-center gap-3 transition-all duration-300';
+      }
+
+      playTone(650, 'sine', 0.09, 0.12);
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 2800);
+    }
+
+    function copyData(textToCopy, label) {
+      try {
+        const tempInput = document.createElement("textarea");
+        tempInput.value = textToCopy;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        showToast(`${label}: ${textToCopy} скопирован!`);
+      } catch (err) {
+        showToast(`Скопировано: ${textToCopy}`);
+      }
+    }
+
+    /* =========================================================================
+       4. REAL GLOBAL VIEWS TRACKER (Starts from 0, Session Guard)
+       ========================================================================= */
+    window.updateViewsDisplay = function(count) {
+      totalViews = count;
+      const el = document.getElementById('global-views-count');
+      if (el) el.textContent = Number(count).toLocaleString('ru-RU');
+    };
+
+    function initPageViews() {
+      // Check session to count 1 visit per browser session (avoids accidental F5 spam)
+      const sessionCounted = sessionStorage.getItem('alex_view_counted');
+      
+      if (!sessionCounted) {
+        sessionStorage.setItem('alex_view_counted', 'true');
+        
+        // Trigger server atomic increment
+        if (window.dbRecordPageView) {
+          window.dbRecordPageView();
+        } else {
+          // Local fallback simulation if server is offline
+          let localViews = parseInt(localStorage.getItem('alex_sim_views') || '0', 10) + 1;
+          localStorage.setItem('alex_sim_views', localViews);
+          window.updateViewsDisplay(localViews);
+        }
+      } else {
+        // Just display current cached/simulated count if offline
+        const localViews = parseInt(localStorage.getItem('alex_sim_views') || '0', 10);
+        if (totalViews === 0 && localViews > 0) {
+          window.updateViewsDisplay(localViews);
+        }
+      }
+    }
+
+    /* =========================================================================
+       5. STRICT 1-HEART-PER-DAY RATE LIMITING (IP + HARDWARE HASH + DATE)
+       ========================================================================= */
+    function getTodayString() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+
+    function generateDeviceHash() {
+      const nav = window.navigator;
+      const scr = window.screen;
+      let raw = `${nav.userAgent}_${scr.width}x${scr.height}_${scr.colorDepth}_${nav.language}_${nav.hardwareConcurrency || 4}`;
+      let hash = 0;
+      for (let i = 0; i < raw.length; i++) {
+        hash = ((hash << 5) - hash) + raw.charCodeAt(i);
+        hash |= 0;
+      }
+      return Math.abs(hash).toString(36);
+    }
+
+    function cleanString(str) {
+      return String(str).replace(/[^a-zA-Z0-9]/g, '_');
+    }
+
+    async function fetchVisitorIp() {
+      try {
+        const res = await fetch('https://api.ipify.org?format=json');
+        const data = await res.json();
+        return data.ip || 'ip_unknown';
+      } catch (e) {
+        try {
+          const res2 = await fetch('https://ipapi.co/json/');
+          const data2 = await res2.json();
+          return data2.ip || 'ip_fallback';
+        } catch (e2) {
+          return 'ip_client';
+        }
+      }
+    }
+
+    window.updateHeartDisplay = function(count) {
+      totalHearts = count;
+      const counterEl = document.getElementById('heart-counter');
+      if (counterEl) counterEl.textContent = Number(count).toLocaleString('ru-RU');
+    };
+
+    function getTimeUntilMidnight() {
+      const now = new Date();
+      const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
+      const diffMs = midnight - now;
+
+      const hours = Math.floor(diffMs / (1000 * 60 * 60));
+      const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+      const secs = Math.floor((diffMs % (1000 * 60)) / 1000);
+
+      return {
+        text: `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
+      };
+    }
+
+    function startCooldownTimer() {
+      if (countdownInterval) clearInterval(countdownInterval);
+
+      const updateMsg = () => {
+        const remaining = getTimeUntilMidnight();
+        const msgEl = document.getElementById('heart-status-message');
+        if (msgEl) {
+          msgEl.innerHTML = `<span class="text-neonRed font-semibold">Сердце отправлено!</span> След. через: <span class="font-mono text-white font-bold">${remaining.text}</span>`;
+        }
+      };
+
+      updateMsg();
+      countdownInterval = setInterval(updateMsg, 1000);
+    }
+
+    function setHeartButtonState(voted) {
+      hasVotedToday = voted;
+      const btn = document.getElementById('heart-btn');
+      const icon = document.getElementById('heart-icon');
+      const text = document.getElementById('heart-btn-text');
+
+      if (voted) {
+        btn.disabled = true;
+        btn.classList.remove('hover:border-neonRed', 'hover:shadow-neon-heart', 'active:scale-95', 'cursor-pointer');
+        btn.classList.add('opacity-85', 'cursor-not-allowed', 'border-emerald-500/50', 'from-slate-900', 'to-slate-800');
+        icon.className = 'fa-solid fa-heart-circle-check text-emerald-400 text-base';
+        text.textContent = 'ОТПРАВЛЕНО СЕГОДНЯ';
+        startCooldownTimer();
+      } else {
+        btn.disabled = false;
+        btn.classList.add('hover:border-neonRed', 'hover:shadow-neon-heart', 'active:scale-95', 'cursor-pointer');
+        btn.classList.remove('opacity-85', 'cursor-not-allowed', 'border-emerald-500/50', 'from-slate-900', 'to-slate-800');
+        icon.className = 'fa-solid fa-heart text-neonRed text-base transition-transform group-hover:scale-125 duration-300';
+        text.textContent = 'ОТДАТЬ СЕРДЦЕ';
+        document.getElementById('heart-status-message').textContent = '1 сердце в день с одного IP';
+        if (countdownInterval) clearInterval(countdownInterval);
+      }
+    }
+
+    async function initHeartSystem() {
+      const today = getTodayString();
+      const devHash = generateDeviceHash();
+      visitorIP = await fetchVisitorIp();
+      const cleanIpStr = cleanString(visitorIP);
+      visitorFingerprint = `${cleanIpStr}_${devHash}`;
+
+      // 1. Local Browser Storage Verification
+      const localKey = `alex_daily_heart_${visitorFingerprint}_${today}`;
+      const legacyKey = `alex_daily_heart_${today}`;
+      let voted = localStorage.getItem(localKey) === 'true' || localStorage.getItem(legacyKey) === 'true';
+
+      // 2. Cloud Server Verification (prevents clearing browser cache or incognito)
+      if (!voted && window.dbCheckVotedToday) {
+        const cloudVoted = await window.dbCheckVotedToday(visitorFingerprint, today);
+        if (cloudVoted) voted = true;
+      }
+
+      setHeartButtonState(voted);
+    }
+
+    async function sendDailyHeart(event) {
+      if (hasVotedToday) {
+        showToast("Вы уже отдали свое сердце сегодня! Возвращайтесь завтра ❤️");
+        return;
+      }
+
+      const today = getTodayString();
+      const localKey = `alex_daily_heart_${visitorFingerprint}_${today}`;
+
+      // Immediately set UI state to avoid rapid double-clicks
+      hasVotedToday = true;
+      totalHearts++;
+      window.updateHeartDisplay(totalHearts);
+
+      localStorage.setItem(localKey, 'true');
+      localStorage.setItem(`alex_daily_heart_${today}`, 'true');
+
+      // Visual feedback: Confetti burst
+      if (window.confetti) {
+        const rect = event.currentTarget.getBoundingClientRect();
+        const x = (rect.left + rect.width / 2) / window.innerWidth;
+        const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+        window.confetti({
+          particleCount: 50,
+          spread: 75,
+          origin: { x, y },
+          colors: ['#ff2a55', '#ff007f', '#00f3ff', '#ffffff'],
+          shapes: ['circle', 'square'],
+          scalar: 0.95,
+          ticks: 180,
+          zIndex: 9999
+        });
+      }
+
+      // Spawn floating hearts
+      for (let i = 0; i < 4; i++) {
+        setTimeout(() => {
+          const heart = document.createElement('i');
+          heart.className = 'fa-solid fa-heart floating-heart text-lg sm:text-xl';
+          heart.style.left = `${50 + (Math.random() * 60 - 30)}%`;
+          heart.style.top = `20%`;
+          document.getElementById('heart-widget-area').appendChild(heart);
+          setTimeout(() => heart.remove(), 1200);
+        }, i * 140);
+      }
+
+      playHeartChime();
+      setHeartButtonState(true);
+      showToast("Твое сердце принято! Спасибо за поддержку ❤️", true);
+
+      // Cloud Firestore synchronization (atomic increment)
+      if (window.dbSubmitDailyHeart) {
+        window.dbSubmitDailyHeart(visitorFingerprint, today);
+      }
+    }
+
+    /* =========================================================================
+       6. PC STATUS (ONLINE / OFFLINE) LOGIC
+       ========================================================================= */
+    function updatePcStatusDisplay(isOnline, customDetail = null, isPlayingGame = null) {
+      pcIsOnline = isOnline;
+      const pill = document.getElementById('desktop-indicator-pill');
+      const dot = document.getElementById('desktop-status-dot');
+      const text = document.getElementById('desktop-status-text');
+      const icon = document.getElementById('desktop-status-icon');
+
+      const avatarBadge = document.getElementById('avatar-status-badge');
+      const avatarDot = document.getElementById('avatar-status-indicator');
+      const avatarText = document.getElementById('avatar-status-text');
+      const avatarGlow = document.getElementById('avatar-glow-ring');
+
+      if (isOnline) {
+        pill.className = "flex items-center gap-2.5 text-xs font-mono px-3.5 py-1.5 rounded-full border transition duration-300 bg-emerald-950/40 border-emerald-500/40 text-emerald-400 shadow-[0_0_15px_-3px_rgba(34,197,94,0.3)]";
+        dot.className = "inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping";
+        icon.className = isPlayingGame ? "fa-solid fa-gamepad text-neonCyan" : "fa-solid fa-desktop text-emerald-400";
+        text.textContent = customDetail || "В СЕТИ (ПК ВКЛЮЧЕН)";
+
+        avatarBadge.className = "absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-black/90 border border-emerald-500/70 text-emerald-400 text-[10px] font-mono px-2.5 py-0.5 rounded-full flex items-center gap-1.5 whitespace-nowrap shadow-md";
+        avatarDot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
+        avatarText.textContent = isPlayingGame ? "PLAYING" : "ONLINE / PC";
+        avatarGlow.className = "w-24 h-24 sm:w-28 sm:h-28 rounded-2xl p-1 bg-gradient-to-tr from-emerald-400 via-neonCyan to-neonPurple transition-all duration-500 shadow-neon-cyan";
+      } else {
+        pill.className = "flex items-center gap-2.5 text-xs font-mono px-3.5 py-1.5 rounded-full border transition duration-300 bg-red-950/20 border-red-800/40 text-slate-400";
+        dot.className = "inline-block w-2.5 h-2.5 rounded-full bg-slate-600";
+        icon.className = "fa-solid fa-power-off text-slate-500";
+        text.textContent = "НЕ В СЕТИ (ПК ВЫКЛЮЧЕН)";
+
+        avatarBadge.className = "absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-black/90 border border-slate-700 text-slate-400 text-[10px] font-mono px-2.5 py-0.5 rounded-full flex items-center gap-1.5 whitespace-nowrap shadow-md";
+        avatarDot.className = "w-2 h-2 rounded-full bg-slate-600";
+        avatarText.textContent = "OFFLINE";
+        avatarGlow.className = "w-24 h-24 sm:w-28 sm:h-28 rounded-2xl p-1 bg-gradient-to-tr from-slate-700 via-slate-800 to-slate-900 transition-all duration-500";
+      }
+    }
+
+    /* =========================================================================
+       7. SPOTIFY RENDERING & PROGRESS TICKER
+       ========================================================================= */
+    function formatTime(ms) {
+      if (!ms || isNaN(ms)) return "00:00";
+      const totalSec = Math.floor(ms / 1000);
+      const min = Math.floor(totalSec / 60);
+      const sec = totalSec % 60;
+      return `${min < 10 ? '0' : ''}${min}:${sec < 10 ? '0' : ''}${sec}`;
+    }
+
+    function renderSpotify(data) {
+      const eq = document.getElementById('spotify-eq');
+      const progressWrap = document.getElementById('spotify-progress-wrap');
+      const dot = document.getElementById('spotify-dot');
+      const note = document.getElementById('spotify-status-note');
+      const trackLink = document.getElementById('spotify-track-link');
+
+      if (!data) {
+        document.getElementById('spotify-title').textContent = "Ничего не играет";
+        document.getElementById('spotify-artist').textContent = "Spotify на паузе";
+        document.getElementById('spotify-album').textContent = "Включи трек на ПК, чтобы он появился здесь";
+        document.getElementById('spotify-art').src = "https://images.unsplash.com/photo-1614680376593-902f749f7ffc?w=300&auto=format&fit=crop&q=80";
+        
+        eq.classList.add('opacity-20');
+        progressWrap.classList.add('opacity-30');
+        dot.className = "w-2 h-2 rounded-full bg-slate-600";
+        note.textContent = "Spotify не активен в Discord";
+        trackLink.classList.add('hidden');
+        trackLink.classList.remove('flex');
+        document.getElementById('spotify-progress').style.width = '0%';
+        document.getElementById('spotify-current-time').textContent = '00:00';
+        document.getElementById('spotify-total-time').textContent = '00:00';
+        return;
+      }
+
+      // Active Track Playing
+      document.getElementById('spotify-title').textContent = data.song;
+      document.getElementById('spotify-artist').textContent = data.artist;
+      document.getElementById('spotify-album').textContent = `в альбоме: ${data.album}`;
+      if (data.album_art_url) {
+        document.getElementById('spotify-art').src = data.album_art_url;
+      }
+
+      eq.classList.remove('opacity-20');
+      progressWrap.classList.remove('opacity-30');
+      dot.className = "w-2 h-2 rounded-full bg-spotifyGreen animate-pulse";
+      note.textContent = "Слушает прямо сейчас на Spotify";
+
+      if (data.track_id) {
+        trackLink.href = `https://open.spotify.com/track/${data.track_id}`;
+        trackLink.classList.remove('hidden');
+        trackLink.classList.add('flex');
+      }
+
+      const total = data.timestamps.end - data.timestamps.start;
+      const current = Math.min(total, Math.max(0, Date.now() - data.timestamps.start));
+      const percent = Math.min(100, (current / total) * 100);
+
+      document.getElementById('spotify-total-time').textContent = formatTime(total);
+      document.getElementById('spotify-current-time').textContent = formatTime(current);
+      document.getElementById('spotify-progress').style.width = `${percent}%`;
+    }
+
+    // Tick the Spotify progress bar every second
+    setInterval(() => {
+      if (activeSpotifyState && activeSpotifyState.timestamps) {
+        const total = activeSpotifyState.timestamps.end - activeSpotifyState.timestamps.start;
+        const current = Math.min(total, Math.max(0, Date.now() - activeSpotifyState.timestamps.start));
+        const percent = Math.min(100, (current / total) * 100);
+        document.getElementById('spotify-current-time').textContent = formatTime(current);
+        document.getElementById('spotify-progress').style.width = `${percent}%`;
+      }
+    }, 1000);
+
+    /* =========================================================================
+       8. REAL-TIME LANYARD API (BOUND TO MY_DISCORD_ID: 522679452447277056)
+       ========================================================================= */
+    function connectLanyard() {
+      if (lanyardSocket) {
+        try { lanyardSocket.close(); } catch(e){}
+      }
+      if (heartbeatTimer) clearInterval(heartbeatTimer);
+
+      try {
+        lanyardSocket = new WebSocket('wss://api.lanyard.rest/socket');
+
+        lanyardSocket.onmessage = (event) => {
+          const msg = JSON.parse(event.data);
+          const { op, d } = msg;
+
+          if (op === 1) {
+            heartbeatTimer = setInterval(() => {
+              if (lanyardSocket && lanyardSocket.readyState === WebSocket.OPEN) {
+                lanyardSocket.send(JSON.stringify({ op: 3 }));
+              }
+            }, d.heartbeat_interval);
+
+            // Subscribe only to YOUR Discord ID
+            lanyardSocket.send(JSON.stringify({
+              op: 2,
+              d: { subscribe_to_id: MY_DISCORD_ID }
+            }));
+          }
+
+          if (op === 0) {
+            handleLanyardData(d);
+          }
+        };
+
+        lanyardSocket.onerror = () => {
+          pollLanyardRest();
+        };
+
+        lanyardSocket.onclose = () => {
+          setTimeout(connectLanyard, 5000);
+        };
+
+      } catch (err) {
+        pollLanyardRest();
+      }
+    }
+
+    function handleLanyardData(data) {
+      if (!data) return;
+
+      // 1. PC & Discord online status
+      const isDesktop = data.active_on_discord_desktop === true;
+      const discordStatus = data.discord_status;
+      const isOnline = discordStatus && discordStatus !== 'offline';
+
+      let playingGameName = null;
+      if (data.activities && data.activities.length > 0) {
+        const game = data.activities.find(a => a.type === 0);
+        if (game) playingGameName = game.name;
+      }
+
+      if (isDesktop || (isOnline && (discordStatus === 'online' || discordStatus === 'dnd' || discordStatus === 'idle'))) {
+        let label = "В СЕТИ (ПК ВКЛЮЧЕН)";
+        if (playingGameName) {
+          label = `В ИГРЕ: ${playingGameName.toUpperCase()}`;
+        } else if (discordStatus === 'dnd') {
+          label = "В СЕТИ // НЕ БЕСПОКОИТЬ";
+        } else if (discordStatus === 'idle') {
+          label = "В СЕТИ // ОТОШЁЛ";
+        }
+        updatePcStatusDisplay(true, label, playingGameName);
+      } else {
+        updatePcStatusDisplay(false);
+      }
+
+      // Dynamic Discord Avatar & Username
+      if (data.discord_user) {
+        if (data.discord_user.avatar) {
+          const avatarUrl = `https://cdn.discordapp.com/avatars/${data.discord_user.id}/${data.discord_user.avatar}.png?size=256`;
+          document.getElementById('user-avatar').src = avatarUrl;
+        }
+        if (data.discord_user.global_name || data.discord_user.username) {
+          const name = data.discord_user.global_name || data.discord_user.username;
+          document.getElementById('user-name').innerHTML = `${name.toUpperCase()} <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonCyan to-neonPink">// NEOCLICK</span>`;
+          document.getElementById('discord-tag-display').textContent = `@${data.discord_user.username}`;
+        }
+      }
+
+      // 2. Real-time Spotify
+      if (data.listening_to_spotify && data.spotify) {
+        activeSpotifyState = data.spotify;
+        renderSpotify(data.spotify);
+      } else {
+        activeSpotifyState = null;
+        renderSpotify(null);
+      }
+    }
+
+    async function pollLanyardRest() {
+      try {
+        const res = await fetch(`https://api.lanyard.rest/v1/users/${MY_DISCORD_ID}`);
+        const json = await res.json();
+        if (json.success && json.data) {
+          handleLanyardData(json.data);
+        }
+      } catch (e) {}
+    }
+
+    // Startup initializations
+    window.onload = function() {
+      initPageViews();
+      initHeartSystem();
+      renderSpotify(null);
+      connectLanyard();
+      setInterval(pollLanyardRest, 15000);
+    };
+  </script>
+</body>
+</html>

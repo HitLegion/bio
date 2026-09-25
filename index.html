@@ -160,12 +160,6 @@
         <span id="global-views-count" class="font-bold text-white tracking-wider">0</span>
       </div>
 
-      <a href="https://discord.gg/lanyard" target="_blank" class="hidden sm:flex px-3 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900/80 hover:border-discordBlurple text-slate-400 hover:text-slate-200 transition items-center gap-1.5">
-        <i class="fa-brands fa-discord text-discordBlurple text-sm"></i>
-        <span>Lanyard Sync</span>
-        <i class="fa-solid fa-arrow-up-right-from-square text-[9px] text-slate-500"></i>
-      </a>
-
       <button id="sfx-toggle" class="px-3 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900/80 hover:border-neonCyan transition flex items-center gap-2 text-slate-300">
         <i id="sfx-icon" class="fa-solid fa-volume-high text-neonCyan"></i>
         <span id="sfx-status" class="hidden md:inline">SFX: ON</span>
@@ -182,7 +176,7 @@
         <div class="relative group">
           <div id="avatar-glow-ring" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl p-1 bg-gradient-to-tr from-slate-700 via-slate-800 to-slate-900 transition-all duration-500">
             <div class="w-full h-full bg-[#0d101a] rounded-xl flex items-center justify-center overflow-hidden border border-white/10">
-              <img id="user-avatar" src="you.jpg" alt="Avatar" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+              <img id="user-avatar" src="you.jpg" alt="Avatar" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://cdn.discordapp.com/avatars/522679452447277056/a_d3e621e11f7740ab90917df76883c801.gif?size=256'">
             </div>
           </div>
           <div id="avatar-status-badge" class="absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-black/90 border border-slate-700 text-slate-400 text-[10px] font-mono px-2.5 py-0.5 rounded-full flex items-center gap-1.5 whitespace-nowrap shadow-md">
@@ -194,32 +188,33 @@
         <div class="mt-2 sm:mt-0">
           <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-1">
             <h1 id="user-name" class="text-2xl sm:text-3xl font-black font-cyber tracking-wider text-white">
-              ZINETRI <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonCyan to-neonPink">// NEOCLICK</span>
+              ZINETRI <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonCyan to-neonPink">dare</span>
             </h1>
             <span class="bg-purple-950/60 text-neonPurple border border-purple-800/50 text-[10px] font-mono font-bold px-2 py-0.5 rounded uppercase">LVL. 99</span>
           </div>
           <p id="user-bio" class="text-slate-400 text-sm max-w-md">
-            Слушаю музыку на репите, играю в катки с друзьями и собираю крутые интерфейсы.
+            forever 8 lvl
           </p>
 
+          <!-- Прямые кликабельные ссылки (открываются в новой вкладке) -->
           <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-4">
-            <button id="btn-copy-tg" class="group px-3 py-1.5 rounded-lg bg-slate-900/80 hover:bg-cyan-950/50 border border-slate-700 hover:border-neonCyan text-xs font-mono text-slate-300 hover:text-white transition flex items-center gap-2">
+            <a href="https://t.me/zinetri" target="_blank" rel="noopener noreferrer" class="group px-3 py-1.5 rounded-lg bg-slate-900/80 hover:bg-cyan-950/50 border border-slate-700 hover:border-neonCyan text-xs font-mono text-slate-300 hover:text-white transition flex items-center gap-2">
               <i class="fa-brands fa-telegram text-sky-400"></i>
-              <span>@alex_tg</span>
-              <i class="fa-regular fa-copy text-slate-500 group-hover:text-neonCyan text-[11px]"></i>
-            </button>
+              <span>@zinetri</span>
+              <i class="fa-solid fa-arrow-up-right-from-square text-slate-500 group-hover:text-neonCyan text-[10px]"></i>
+            </a>
 
-            <button id="btn-copy-dc" class="group px-3 py-1.5 rounded-lg bg-slate-900/80 hover:bg-purple-950/50 border border-slate-700 hover:border-neonPurple text-xs font-mono text-slate-300 hover:text-white transition flex items-center gap-2">
+            <a href="https://discord.com/users/522679452447277056" target="_blank" rel="noopener noreferrer" class="group px-3 py-1.5 rounded-lg bg-slate-900/80 hover:bg-purple-950/50 border border-slate-700 hover:border-neonPurple text-xs font-mono text-slate-300 hover:text-white transition flex items-center gap-2">
               <i class="fa-brands fa-discord text-discordBlurple"></i>
-              <span id="discord-tag-display">@zinetri</span>
-              <i class="fa-regular fa-copy text-slate-500 group-hover:text-neonPurple text-[11px]"></i>
-            </button>
+              <span>@zinetri</span>
+              <i class="fa-solid fa-arrow-up-right-from-square text-slate-500 group-hover:text-neonPurple text-[10px]"></i>
+            </a>
 
-            <button id="btn-copy-steam" class="group px-3 py-1.5 rounded-lg bg-slate-900/80 hover:bg-slate-800 border border-slate-700 hover:border-slate-400 text-xs font-mono text-slate-300 hover:text-white transition flex items-center gap-2">
+            <a href="https://steamcommunity.com/id/zinetri/" target="_blank" rel="noopener noreferrer" class="group px-3 py-1.5 rounded-lg bg-slate-900/80 hover:bg-slate-800 border border-slate-700 hover:border-slate-400 text-xs font-mono text-slate-300 hover:text-white transition flex items-center gap-2">
               <i class="fa-brands fa-steam text-slate-300"></i>
               <span>Steam</span>
-              <i class="fa-regular fa-copy text-slate-500 text-[11px]"></i>
-            </button>
+              <i class="fa-solid fa-arrow-up-right-from-square text-slate-500 text-[10px]"></i>
+            </a>
           </div>
         </div>
       </div>
@@ -299,7 +294,7 @@
             <span id="spotify-dot" class="w-2 h-2 rounded-full bg-slate-600"></span>
             <span id="spotify-status-note">Ожидание Spotify активности...</span>
           </div>
-          <a id="spotify-track-link" href="#" target="_blank" class="text-[11px] text-slate-500 hover:text-spotifyGreen transition hidden items-center gap-1">
+          <a id="spotify-track-link" href="#" target="_blank" rel="noopener noreferrer" class="text-[11px] text-slate-500 hover:text-spotifyGreen transition hidden items-center gap-1">
             <span>Открыть в Spotify</span>
             <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
           </a>
@@ -400,24 +395,18 @@
         </div>
       </div>
 
-      <div class="bento-card rounded-2xl p-5 flex flex-col justify-between">
-        <div>
-          <div class="text-xs font-cyber tracking-wider text-neonGreen flex items-center gap-2 mb-3">
-            <i class="fa-solid fa-bolt"></i> ИНТЕРЕСЫ & СКИЛЛЫ
-          </div>
-          <div class="flex flex-wrap gap-1.5">
-            <span class="px-2.5 py-1 rounded-md bg-cyan-950/40 border border-cyan-800/50 text-cyan-300 font-mono text-[11px]">Web Dev</span>
-            <span class="px-2.5 py-1 rounded-md bg-emerald-950/40 border border-emerald-800/50 text-emerald-300 font-mono text-[11px]">JavaScript</span>
-            <span class="px-2.5 py-1 rounded-md bg-purple-950/40 border border-purple-800/50 text-purple-300 font-mono text-[11px]">Python</span>
-            <span class="px-2.5 py-1 rounded-md bg-pink-950/40 border border-pink-800/50 text-pink-300 font-mono text-[11px]">Монтаж видео</span>
-            <span class="px-2.5 py-1 rounded-md bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[11px]">After Effects</span>
-            <span class="px-2.5 py-1 rounded-md bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[11px]">Дизайн UI</span>
-          </div>
+      <!-- Bento: Skills (Без блока с классом) -->
+      <div class="bento-card rounded-2xl p-5 flex flex-col justify-start">
+        <div class="text-xs font-cyber tracking-wider text-neonGreen flex items-center gap-2 mb-3">
+          <i class="fa-solid fa-bolt"></i> ИНТЕРЕСЫ & СКИЛЛЫ
         </div>
-
-        <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono text-slate-400">
-          <span>Класс:</span>
-          <span class="text-white font-bold">10 «А»</span>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="px-2.5 py-1 rounded-md bg-cyan-950/40 border border-cyan-800/50 text-cyan-300 font-mono text-[11px]">Web Dev</span>
+          <span class="px-2.5 py-1 rounded-md bg-emerald-950/40 border border-emerald-800/50 text-emerald-300 font-mono text-[11px]">JavaScript</span>
+          <span class="px-2.5 py-1 rounded-md bg-purple-950/40 border border-purple-800/50 text-purple-300 font-mono text-[11px]">Python</span>
+          <span class="px-2.5 py-1 rounded-md bg-pink-950/40 border border-pink-800/50 text-pink-300 font-mono text-[11px]">Монтаж видео</span>
+          <span class="px-2.5 py-1 rounded-md bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[11px]">After Effects</span>
+          <span class="px-2.5 py-1 rounded-md bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[11px]">Дизайн UI</span>
         </div>
       </div>
 
@@ -426,12 +415,12 @@
     <!-- Footer -->
     <footer class="mt-2 mb-8 text-center text-xs font-mono text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-3 px-2">
       <div>
-        <span>Zinetri Bio Hub • Живой статус и Spotify трекер через Discord Lanyard.</span>
+        <span>Zinetri Bio Hub • Живой онлайн и Spotify статус.</span>
       </div>
       <div class="flex items-center gap-4 text-sm">
-        <a href="https://github.com/hitlegion" target="_blank" class="hover:text-neonCyan transition"><i class="fa-brands fa-github"></i></a>
-        <a href="https://steamcommunity.com" target="_blank" class="hover:text-slate-300 transition"><i class="fa-brands fa-steam"></i></a>
-        <a href="https://t.me" target="_blank" class="hover:text-sky-400 transition"><i class="fa-brands fa-telegram"></i></a>
+        <a href="https://github.com/hitlegion" target="_blank" rel="noopener noreferrer" class="hover:text-neonCyan transition"><i class="fa-brands fa-github"></i></a>
+        <a href="https://steamcommunity.com/id/zinetri/" target="_blank" rel="noopener noreferrer" class="hover:text-slate-300 transition"><i class="fa-brands fa-steam"></i></a>
+        <a href="https://t.me/zinetri" target="_blank" rel="noopener noreferrer" class="hover:text-sky-400 transition"><i class="fa-brands fa-telegram"></i></a>
       </div>
     </footer>
 
@@ -503,7 +492,7 @@
       }
     }
 
-    /* 2. TOAST & CLIPBOARD */
+    /* 2. TOAST */
     function showToast(text, isHeart = false) {
       const toast = document.getElementById('toast');
       const msg = document.getElementById('toast-message');
@@ -526,16 +515,7 @@
       }, 2800);
     }
 
-    function copyData(textToCopy, label) {
-      try {
-        navigator.clipboard.writeText(textToCopy);
-        showToast(`${label}: ${textToCopy} скопирован!`);
-      } catch (err) {
-        showToast(`Скопировано: ${textToCopy}`);
-      }
-    }
-
-    /* 3. НАДЕЖНЫЙ FETCH ДЛЯ SUPABASE БЕЗ СТОРОННИХ БИБЛИОТЕК */
+    /* 3. SUPABASE STATS */
     async function initStats() {
       try {
         const headers = {
@@ -544,14 +524,12 @@
           'Content-Type': 'application/json'
         };
 
-        // 1. Получить данные
         const res = await fetch(SUPABASE_URL, { headers });
         const list = await res.json();
         
         let views = (list && list[0] && typeof list[0].views === 'number') ? list[0].views : 0;
         let hearts = (list && list[0] && typeof list[0].hearts === 'number') ? list[0].hearts : 0;
 
-        // 2. Инкремент визита
         const sessionCounted = sessionStorage.getItem('hitlegion_view_counted');
         if (!sessionCounted) {
           sessionStorage.setItem('hitlegion_view_counted', 'true');
@@ -790,7 +768,7 @@
       }
     }, 1000);
 
-    /* 6. LANYARD REST & WEBSOCKET */
+    /* 6. LANYARD */
     function handleLanyardData(data) {
       if (!data) return;
 
@@ -816,15 +794,6 @@
         updatePcStatusDisplay(false);
       }
 
-      if (data.discord_user) {
-        const user = data.discord_user;
-        const name = user.global_name || user.username;
-        if (name) {
-          document.getElementById('user-name').innerHTML = `${name.toUpperCase()} <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonCyan to-neonPink">// NEOCLICK</span>`;
-          document.getElementById('discord-tag-display').textContent = `@${user.username}`;
-        }
-      }
-
       if (data.listening_to_spotify && data.spotify) {
         activeSpotifyState = data.spotify;
         renderSpotify(data.spotify);
@@ -844,17 +813,10 @@
       } catch (e) {}
     }
 
-    /* 7. ИНИЦИАЛИЗАЦИЯ И СЛУШАТЕЛИ КЛИКОВ */
     document.addEventListener('DOMContentLoaded', () => {
-      // Привязка кликов к кнопкам копирования и SFX
       document.getElementById('sfx-toggle').addEventListener('click', toggleAudio);
       document.getElementById('heart-btn').addEventListener('click', sendDailyHeart);
       
-      document.getElementById('btn-copy-tg').addEventListener('click', () => copyData('@alex_tg', 'Telegram'));
-      document.getElementById('btn-copy-dc').addEventListener('click', () => copyData('522679452447277056', 'Discord ID'));
-      document.getElementById('btn-copy-steam').addEventListener('click', () => copyData('https://steamcommunity.com', 'Steam'));
-
-      // Запуск данных
       initStats();
       initHeartSystem();
       pollLanyardRest();

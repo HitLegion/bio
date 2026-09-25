@@ -12,9 +12,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
-  <!-- Supabase SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <script>
     tailwind.config = {
       theme: {
@@ -150,29 +147,26 @@
 
   <!-- Header -->
   <header class="w-full max-w-5xl flex flex-wrap justify-between items-center z-10 mb-6 gap-3">
-    <!-- Live Online Indicator -->
     <div id="desktop-indicator-pill" class="flex items-center gap-2.5 text-xs font-mono px-3.5 py-1.5 rounded-full border transition duration-300 bg-slate-900/70 border-slate-700 text-slate-400">
       <span id="desktop-status-dot" class="inline-block w-2.5 h-2.5 rounded-full bg-slate-500"></span>
       <i id="desktop-status-icon" class="fa-solid fa-desktop"></i>
       <span id="desktop-status-text" class="font-bold tracking-wide">ПОДКЛЮЧЕНИЕ К СЕТИ...</span>
     </div>
 
-    <!-- Right Controls -->
     <div class="flex items-center gap-2">
-      <!-- SUPABASE REAL-TIME VIEWS -->
       <div class="px-3 py-1.5 rounded-full text-xs font-mono border border-cyan-500/30 bg-cyan-950/30 text-neonCyan flex items-center gap-2 shadow-[0_0_15px_-4px_rgba(0,243,255,0.25)]">
         <i class="fa-solid fa-eye text-[11px] animate-pulse"></i>
         <span>ПРОСМОТРЫ:</span>
         <span id="global-views-count" class="font-bold text-white tracking-wider">0</span>
       </div>
 
-      <a href="https://discord.gg/lanyard" target="_blank" title="Чтобы бот транслировал онлайн, вступи на сервер Lanyard" class="hidden sm:flex px-3 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900/80 hover:border-discordBlurple text-slate-400 hover:text-slate-200 transition items-center gap-1.5">
+      <a href="https://discord.gg/lanyard" target="_blank" class="hidden sm:flex px-3 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900/80 hover:border-discordBlurple text-slate-400 hover:text-slate-200 transition items-center gap-1.5">
         <i class="fa-brands fa-discord text-discordBlurple text-sm"></i>
         <span>Lanyard Sync</span>
         <i class="fa-solid fa-arrow-up-right-from-square text-[9px] text-slate-500"></i>
       </a>
 
-      <button id="sfx-toggle" onclick="toggleAudio()" class="px-3 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900/80 hover:border-neonCyan transition flex items-center gap-2 text-slate-300">
+      <button id="sfx-toggle" class="px-3 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900/80 hover:border-neonCyan transition flex items-center gap-2 text-slate-300">
         <i id="sfx-icon" class="fa-solid fa-volume-high text-neonCyan"></i>
         <span id="sfx-status" class="hidden md:inline">SFX: ON</span>
       </button>
@@ -209,19 +203,19 @@
           </p>
 
           <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-4">
-            <button onclick="copyData('@alex_tg', 'Telegram')" class="group px-3 py-1.5 rounded-lg bg-slate-900/80 hover:bg-cyan-950/50 border border-slate-700 hover:border-neonCyan text-xs font-mono text-slate-300 hover:text-white transition flex items-center gap-2">
+            <button id="btn-copy-tg" class="group px-3 py-1.5 rounded-lg bg-slate-900/80 hover:bg-cyan-950/50 border border-slate-700 hover:border-neonCyan text-xs font-mono text-slate-300 hover:text-white transition flex items-center gap-2">
               <i class="fa-brands fa-telegram text-sky-400"></i>
               <span>@alex_tg</span>
               <i class="fa-regular fa-copy text-slate-500 group-hover:text-neonCyan text-[11px]"></i>
             </button>
 
-            <button onclick="copyData('522679452447277056', 'Discord ID')" class="group px-3 py-1.5 rounded-lg bg-slate-900/80 hover:bg-purple-950/50 border border-slate-700 hover:border-neonPurple text-xs font-mono text-slate-300 hover:text-white transition flex items-center gap-2">
+            <button id="btn-copy-dc" class="group px-3 py-1.5 rounded-lg bg-slate-900/80 hover:bg-purple-950/50 border border-slate-700 hover:border-neonPurple text-xs font-mono text-slate-300 hover:text-white transition flex items-center gap-2">
               <i class="fa-brands fa-discord text-discordBlurple"></i>
               <span id="discord-tag-display">@zinetri</span>
               <i class="fa-regular fa-copy text-slate-500 group-hover:text-neonPurple text-[11px]"></i>
             </button>
 
-            <button onclick="copyData('https://steamcommunity.com', 'Steam')" class="group px-3 py-1.5 rounded-lg bg-slate-900/80 hover:bg-slate-800 border border-slate-700 hover:border-slate-400 text-xs font-mono text-slate-300 hover:text-white transition flex items-center gap-2">
+            <button id="btn-copy-steam" class="group px-3 py-1.5 rounded-lg bg-slate-900/80 hover:bg-slate-800 border border-slate-700 hover:border-slate-400 text-xs font-mono text-slate-300 hover:text-white transition flex items-center gap-2">
               <i class="fa-brands fa-steam text-slate-300"></i>
               <span>Steam</span>
               <i class="fa-regular fa-copy text-slate-500 text-[11px]"></i>
@@ -232,7 +226,7 @@
 
       <!-- DAILY HEART WIDGET -->
       <div id="heart-widget-area" class="relative flex flex-col items-center justify-center gap-2 w-full md:w-60 pt-4 md:pt-0 border-t md:border-t-0 border-slate-800">
-        <button id="heart-btn" onclick="sendDailyHeart(event)" class="relative w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-neonRed/20 via-pink-950/40 to-purple-900/30 border border-neonRed/40 hover:border-neonRed text-white font-cyber text-xs tracking-wider flex items-center justify-center gap-2.5 hover:shadow-neon-heart transition-all duration-300 group active:scale-95 cursor-pointer">
+        <button id="heart-btn" class="relative w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-neonRed/20 via-pink-950/40 to-purple-900/30 border border-neonRed/40 hover:border-neonRed text-white font-cyber text-xs tracking-wider flex items-center justify-center gap-2.5 hover:shadow-neon-heart transition-all duration-300 group active:scale-95 cursor-pointer">
           <i id="heart-icon" class="fa-solid fa-heart text-neonRed text-base transition-transform group-hover:scale-125 duration-300"></i>
           <span id="heart-btn-text">ОТДАТЬ СЕРДЦЕ</span>
           <span id="heart-counter" class="bg-black/70 border border-neonRed/40 px-2.5 py-0.5 rounded text-neonRed font-mono font-bold text-xs shadow-inner">
@@ -435,9 +429,9 @@
         <span>Zinetri Bio Hub • Живой статус и Spotify трекер через Discord Lanyard.</span>
       </div>
       <div class="flex items-center gap-4 text-sm">
-        <a href="#" onclick="copyData('https://github.com/hitlegion', 'GitHub'); return false;" class="hover:text-neonCyan transition"><i class="fa-brands fa-github"></i></a>
-        <a href="#" onclick="copyData('https://steamcommunity.com', 'Steam'); return false;" class="hover:text-slate-300 transition"><i class="fa-brands fa-steam"></i></a>
-        <a href="#" onclick="copyData('@alex_tg', 'Telegram'); return false;" class="hover:text-sky-400 transition"><i class="fa-brands fa-telegram"></i></a>
+        <a href="https://github.com/hitlegion" target="_blank" class="hover:text-neonCyan transition"><i class="fa-brands fa-github"></i></a>
+        <a href="https://steamcommunity.com" target="_blank" class="hover:text-slate-300 transition"><i class="fa-brands fa-steam"></i></a>
+        <a href="https://t.me" target="_blank" class="hover:text-sky-400 transition"><i class="fa-brands fa-telegram"></i></a>
       </div>
     </footer>
 
@@ -450,27 +444,18 @@
 
   <script>
     const MY_DISCORD_ID = "522679452447277056";
-
-    const SUPABASE_URL = "https://qctfajmwkrhqsehxaxon.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFjdGZham13a3JocXNlaHhheG9uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzMzc5ODQsImV4cCI6MjEwNTkxMzk4NH0.i1H9U8UESsc9DMdfo2C3wnlAotnSwbarWpGN9vVmIeg";
-
-    let supabase = null;
-    try {
-      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    } catch(e) {}
+    const SUPABASE_URL = "https://qctfajmwkrhqsehxaxon.supabase.co/rest/v1/stats?id=eq.main";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFjdGZham13a3JocXNlaHhheG9uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzMzc5ODQsImV4cCI6MjEwNTkxMzk4NH0.i1H9U8UESsc9DMdfo2C3wnlAotnSwbarWpGN9vVmIeg";
 
     let sfxEnabled = true;
     let audioCtx = null;
     let activeSpotifyState = null;
-    let lanyardSocket = null;
-    let heartbeatTimer = null;
-
     let totalViews = 0;
     let totalHearts = 0;
     let hasVotedToday = false;
     let countdownInterval = null;
 
-    /* AUDIO */
+    /* 1. AUDIO */
     function initAudio() {
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }
@@ -518,7 +503,7 @@
       }
     }
 
-    /* TOAST & CLIPBOARD */
+    /* 2. TOAST & CLIPBOARD */
     function showToast(text, isHeart = false) {
       const toast = document.getElementById('toast');
       const msg = document.getElementById('toast-message');
@@ -550,33 +535,42 @@
       }
     }
 
-    /* SUPABASE STATS */
+    /* 3. НАДЕЖНЫЙ FETCH ДЛЯ SUPABASE БЕЗ СТОРОННИХ БИБЛИОТЕК */
     async function initStats() {
-      if (!supabase) return;
       try {
-        const { data, error } = await supabase
-          .from('stats')
-          .select('views, hearts')
-          .eq('id', 'main')
-          .single();
+        const headers = {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json'
+        };
 
-        let currentViews = (data && typeof data.views === 'number') ? data.views : 0;
-        let currentHearts = (data && typeof data.hearts === 'number') ? data.hearts : 0;
+        // 1. Получить данные
+        const res = await fetch(SUPABASE_URL, { headers });
+        const list = await res.json();
+        
+        let views = (list && list[0] && typeof list[0].views === 'number') ? list[0].views : 0;
+        let hearts = (list && list[0] && typeof list[0].hearts === 'number') ? list[0].hearts : 0;
 
+        // 2. Инкремент визита
         const sessionCounted = sessionStorage.getItem('hitlegion_view_counted');
         if (!sessionCounted) {
           sessionStorage.setItem('hitlegion_view_counted', 'true');
-          currentViews += 1;
-          await supabase.from('stats').update({ views: currentViews }).eq('id', 'main');
+          views += 1;
+          await fetch(SUPABASE_URL, {
+            method: 'PATCH',
+            headers,
+            body: JSON.stringify({ views: views })
+          });
         }
 
-        totalViews = currentViews;
-        totalHearts = currentHearts;
+        totalViews = views;
+        totalHearts = hearts;
 
         document.getElementById('global-views-count').textContent = Number(totalViews).toLocaleString('ru-RU');
         document.getElementById('heart-counter').textContent = Number(totalHearts).toLocaleString('ru-RU');
+
       } catch (err) {
-        console.warn("Supabase fetch fallback:", err);
+        console.warn("Stats API error:", err);
       }
     }
 
@@ -677,14 +671,20 @@
       playHeartChime();
       showToast("Твое сердце принято! Спасибо за поддержку ❤️", true);
 
-      if (supabase) {
-        try {
-          await supabase.from('stats').update({ hearts: totalHearts }).eq('id', 'main');
-        } catch (e) {}
-      }
+      try {
+        await fetch(SUPABASE_URL, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ hearts: totalHearts })
+        });
+      } catch (e) {}
     }
 
-    /* PC / DISCORD STATUS LOGIC */
+    /* 4. DISCORD / PC STATUS */
     function updatePcStatusDisplay(isOnline, customDetail = null, isPlayingGame = null) {
       const pill = document.getElementById('desktop-indicator-pill');
       const dot = document.getElementById('desktop-status-dot');
@@ -719,7 +719,7 @@
       }
     }
 
-    /* SPOTIFY RENDER */
+    /* 5. SPOTIFY */
     function formatTime(ms) {
       if (!ms || isNaN(ms)) return "00:00";
       const totalSec = Math.floor(ms / 1000);
@@ -790,7 +790,7 @@
       }
     }, 1000);
 
-    /* LANYARD EVENT HANDLER */
+    /* 6. LANYARD REST & WEBSOCKET */
     function handleLanyardData(data) {
       if (!data) return;
 
@@ -806,7 +806,6 @@
         if (game) playingGameName = game.name;
       }
 
-      // Если в онлайне в вебе, на ПК или в приложении — статус "В СЕТИ"
       if (isOnline || isDesktop || isWeb || isMobile) {
         let label = isDesktop ? "В СЕТИ (ПК ВКЛЮЧЕН)" : "В СЕТИ (ОНЛАЙН)";
         if (playingGameName) {
@@ -817,7 +816,6 @@
         updatePcStatusDisplay(false);
       }
 
-      // Твой реальный ник и аватарка из Discord (включая анимированные GIF)
       if (data.discord_user) {
         const user = data.discord_user;
         if (user.avatar) {
@@ -832,51 +830,12 @@
         }
       }
 
-      // Real-time Spotify
       if (data.listening_to_spotify && data.spotify) {
         activeSpotifyState = data.spotify;
         renderSpotify(data.spotify);
       } else {
         activeSpotifyState = null;
         renderSpotify(null);
-      }
-    }
-
-    function connectLanyard() {
-      if (lanyardSocket) {
-        try { lanyardSocket.close(); } catch(e){}
-      }
-      if (heartbeatTimer) clearInterval(heartbeatTimer);
-
-      try {
-        lanyardSocket = new WebSocket('wss://api.lanyard.rest/socket');
-
-        lanyardSocket.onmessage = (event) => {
-          try {
-            const msg = JSON.parse(event.data);
-            const { op, d } = msg;
-
-            if (op === 1) {
-              heartbeatTimer = setInterval(() => {
-                if (lanyardSocket && lanyardSocket.readyState === WebSocket.OPEN) {
-                  lanyardSocket.send(JSON.stringify({ op: 3 }));
-                }
-              }, d.heartbeat_interval);
-
-              lanyardSocket.send(JSON.stringify({
-                op: 2,
-                d: { subscribe_to_id: MY_DISCORD_ID }
-              }));
-            }
-
-            if (op === 0) handleLanyardData(d);
-          } catch(e){}
-        };
-
-        lanyardSocket.onerror = () => pollLanyardRest();
-        lanyardSocket.onclose = () => setTimeout(connectLanyard, 5000);
-      } catch (err) {
-        pollLanyardRest();
       }
     }
 
@@ -890,13 +849,22 @@
       } catch (e) {}
     }
 
-    window.onload = function() {
+    /* 7. ИНИЦИАЛИЗАЦИЯ И СЛУШАТЕЛИ КЛИКОВ */
+    document.addEventListener('DOMContentLoaded', () => {
+      // Привязка кликов к кнопкам копирования и SFX
+      document.getElementById('sfx-toggle').addEventListener('click', toggleAudio);
+      document.getElementById('heart-btn').addEventListener('click', sendDailyHeart);
+      
+      document.getElementById('btn-copy-tg').addEventListener('click', () => copyData('@alex_tg', 'Telegram'));
+      document.getElementById('btn-copy-dc').addEventListener('click', () => copyData('522679452447277056', 'Discord ID'));
+      document.getElementById('btn-copy-steam').addEventListener('click', () => copyData('https://steamcommunity.com', 'Steam'));
+
+      // Запуск данных
       initStats();
       initHeartSystem();
-      renderSpotify(null);
-      connectLanyard();
-      setInterval(pollLanyardRest, 6000);
-    };
+      pollLanyardRest();
+      setInterval(pollLanyardRest, 4000);
+    });
   </script>
 </body>
 </html>

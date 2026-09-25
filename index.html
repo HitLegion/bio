@@ -182,7 +182,7 @@
         <div class="relative group">
           <div id="avatar-glow-ring" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl p-1 bg-gradient-to-tr from-slate-700 via-slate-800 to-slate-900 transition-all duration-500">
             <div class="w-full h-full bg-[#0d101a] rounded-xl flex items-center justify-center overflow-hidden border border-white/10">
-              <img id="user-avatar" src="https://cdn.discordapp.com/avatars/522679452447277056/a_d3e621e11f7740ab90917df76883c801.gif?size=256" alt="Avatar" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://cdn.discordapp.com/avatars/522679452447277056/a_d3e621e11f7740ab90917df76883c801.png?size=256'">
+              <img id="user-avatar" src="you.jpg" alt="Avatar" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
             </div>
           </div>
           <div id="avatar-status-badge" class="absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-black/90 border border-slate-700 text-slate-400 text-[10px] font-mono px-2.5 py-0.5 rounded-full flex items-center gap-1.5 whitespace-nowrap shadow-md">
@@ -818,11 +818,6 @@
 
       if (data.discord_user) {
         const user = data.discord_user;
-        if (user.avatar) {
-          const isGif = user.avatar.startsWith('a_');
-          const ext = isGif ? 'gif' : 'png';
-          document.getElementById('user-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${ext}?size=256`;
-        }
         const name = user.global_name || user.username;
         if (name) {
           document.getElementById('user-name').innerHTML = `${name.toUpperCase()} <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonCyan to-neonPink">// NEOCLICK</span>`;

@@ -12,6 +12,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
+  <!-- Официальный SDK Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
     tailwind.config = {
       theme: {
@@ -147,7 +150,7 @@
 
   <!-- Header -->
   <header class="w-full max-w-5xl flex flex-wrap justify-between items-center z-10 mb-6 gap-3">
-    <!-- Live Desktop Online/Offline Badge -->
+    <!-- Live Desktop Indicator -->
     <div id="desktop-indicator-pill" class="flex items-center gap-2.5 text-xs font-mono px-3.5 py-1.5 rounded-full border transition duration-300 bg-slate-900/70 border-slate-700 text-slate-400">
       <span id="desktop-status-dot" class="inline-block w-2.5 h-2.5 rounded-full bg-slate-500"></span>
       <i id="desktop-status-icon" class="fa-solid fa-desktop"></i>
@@ -156,10 +159,11 @@
 
     <!-- Right Controls -->
     <div class="flex items-center gap-2">
+      <!-- GLOBAL VIEWS COUNTER FROM SUPABASE -->
       <div class="px-3 py-1.5 rounded-full text-xs font-mono border border-cyan-500/30 bg-cyan-950/30 text-neonCyan flex items-center gap-2 shadow-[0_0_15px_-4px_rgba(0,243,255,0.25)]">
         <i class="fa-solid fa-eye text-[11px] animate-pulse"></i>
         <span>ПРОСМОТРЫ:</span>
-        <span id="global-views-count" class="font-bold text-white tracking-wider">...</span>
+        <span id="global-views-count" class="font-bold text-white tracking-wider">0</span>
       </div>
 
       <a href="https://discord.gg/lanyard" target="_blank" title="Чтобы бот транслировал ПК онлайн, вступи на сервер Lanyard" class="hidden sm:flex px-3 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900/80 hover:border-discordBlurple text-slate-400 hover:text-slate-200 transition items-center gap-1.5">
@@ -246,7 +250,6 @@
     <!-- Bento Grid Row 2: Live Spotify & Hardware Rig -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-      <!-- Bento: REAL-TIME SPOTIFY -->
       <div id="spotify-card" class="bento-card rounded-2xl p-6 md:col-span-2 flex flex-col justify-between border-l-4 border-l-spotifyGreen relative overflow-hidden group shadow-spotify">
         <div class="absolute -right-16 -top-16 w-48 h-48 bg-spotifyGreen/10 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -309,7 +312,7 @@
         </div>
       </div>
 
-      <!-- Bento: PC Hardware Specs Rig -->
+      <!-- Bento: PC Specs -->
       <div class="bento-card rounded-2xl p-5 flex flex-col justify-between">
         <div>
           <div class="text-xs font-cyber tracking-wider text-neonPurple flex items-center justify-between mb-3">
@@ -347,10 +350,9 @@
 
     </div>
 
-    <!-- Bento Grid Row 3: Games Played & Activity -->
+    <!-- Bento Grid Row 3: Games & Skills -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-      <!-- Bento: Games & Current Ranks -->
       <div class="bento-card rounded-2xl p-5 md:col-span-2 flex flex-col justify-between">
         <div>
           <div class="flex justify-between items-center mb-4">
@@ -404,7 +406,6 @@
         </div>
       </div>
 
-      <!-- Bento: Quick Skills & Interests -->
       <div class="bento-card rounded-2xl p-5 flex flex-col justify-between">
         <div>
           <div class="text-xs font-cyber tracking-wider text-neonGreen flex items-center gap-2 mb-3">
@@ -442,7 +443,6 @@
 
   </main>
 
-  <!-- Toast Notification -->
   <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 pointer-events-none bg-slate-900 border border-neonCyan text-white text-xs font-mono px-4 py-3 rounded-xl shadow-neon-cyan flex items-center gap-3">
     <i class="fa-solid fa-circle-check text-neonCyan text-base"></i>
     <span id="toast-message">Скопировано!</span>
@@ -450,7 +450,12 @@
 
   <script>
     const MY_DISCORD_ID = "522679452447277056";
-    const APP_ID = "hitlegion_cyber_stats";
+
+    /* ТВОИ ВШИТЫЕ КЛЮЧИ SUPABASE */
+    const SUPABASE_URL = "https://qctfajmwkrhqsehxaxon.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFjdGZham13a3JocXNlaHhheG9uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzMzc5ODQsImV4cCI6MjEwNTkxMzk4NH0.i1H9U8UESsc9DMdfo2C3wnlAotnSwbarWpGN9vVmIeg";
+
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     let sfxEnabled = true;
     let audioCtx = null;
@@ -463,7 +468,7 @@
     let hasVotedToday = false;
     let countdownInterval = null;
 
-    /* 1. AUDIO */
+    /* AUDIO */
     function initAudio() {
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }
@@ -511,7 +516,7 @@
       }
     }
 
-    /* 2. TOAST & CLIPBOARD */
+    /* TOAST & CLIPBOARD */
     function showToast(text, isHeart = false) {
       const toast = document.getElementById('toast');
       const msg = document.getElementById('toast-message');
@@ -543,77 +548,36 @@
       }
     }
 
-    /* 3. НАДЕЖНЫЙ СЕРВЕРНЫЙ СЧЕТЧИК БЕЗ CORS-ОШИБОК (JSONP / FETCH FALLBACK) */
-    function callCloudCounter(key, isHit = false) {
-      return new Promise((resolve) => {
-        const action = isHit ? 'hit' : 'get';
-        const cbName = `c_api_${action}_${key}_${Math.floor(Math.random() * 100000)}`;
-        const script = document.createElement('script');
-        let done = false;
-
-        window[cbName] = function(data) {
-          if (done) return;
-          done = true;
-          try { delete window[cbName]; } catch(e){}
-          script.remove();
-          if (data && typeof data.value === 'number') {
-            resolve(data.value);
-          } else {
-            resolve(null);
-          }
-        };
-
-        script.src = `https://api.countapi.xyz/${action}/${APP_ID}/${key}?callback=${cbName}`;
+    /* =========================================================================
+       СИНХРОНИЗАЦИЯ БАЗЫ SUPABASE
+       ========================================================================= */
+    async function initStats() {
+      try {
+        // 1. Получаем текущие данные из Supabase
+        const { data, error } = await supabase.from('stats').select('views, hearts').eq('id', 'main').single();
         
-        script.onerror = function() {
-          if (done) return;
-          done = true;
-          try { delete window[cbName]; } catch(e){}
-          script.remove();
-          // Fallback через прямой fetch
-          fetch(`https://api.countapi.xyz/${action}/${APP_ID}/${key}`)
-            .then(r => r.json())
-            .then(d => resolve(d.value || null))
-            .catch(() => resolve(null));
-        };
+        let currentViews = (data && typeof data.views === 'number') ? data.views : 0;
+        let currentHearts = (data && typeof data.hearts === 'number') ? data.hearts : 0;
 
-        setTimeout(() => {
-          if (!done) {
-            done = true;
-            try { delete window[cbName]; } catch(e){}
-            script.remove();
-            resolve(null);
-          }
-        }, 3500);
+        // 2. Проверяем уникальность визита за сессию
+        const sessionCounted = sessionStorage.getItem('hitlegion_view_counted');
+        if (!sessionCounted) {
+          sessionStorage.setItem('hitlegion_view_counted', 'true');
+          currentViews += 1;
+          await supabase.from('stats').update({ views: currentViews }).eq('id', 'main');
+        }
 
-        document.head.appendChild(script);
-      });
+        totalViews = currentViews;
+        totalHearts = currentHearts;
+
+        document.getElementById('global-views-count').textContent = Number(totalViews).toLocaleString('ru-RU');
+        document.getElementById('heart-counter').textContent = Number(totalHearts).toLocaleString('ru-RU');
+
+      } catch (err) {
+        console.error("Ошибка загрузки Supabase:", err);
+      }
     }
 
-    /* ПРОСМОТРЫ */
-    async function initPageViews() {
-      const sessionCounted = sessionStorage.getItem('alex_view_counted');
-      let views = null;
-
-      if (!sessionCounted) {
-        sessionStorage.setItem('alex_view_counted', 'true');
-        views = await callCloudCounter('views', true); // +1 в облаке
-      } else {
-        views = await callCloudCounter('views', false); // просто получить текущее
-      }
-
-      if (views !== null && views !== undefined) {
-        totalViews = views;
-        localStorage.setItem('alex_cached_views', views);
-      } else {
-        // Если сеть тупит, берем из локального кэша
-        totalViews = parseInt(localStorage.getItem('alex_cached_views') || '1', 10);
-      }
-
-      document.getElementById('global-views-count').textContent = Number(totalViews).toLocaleString('ru-RU');
-    }
-
-    /* 4. DAILY HEARTS & ANTI-CHEAT */
     function getTodayString() {
       const d = new Date();
       return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -664,21 +628,10 @@
       }
     }
 
-    async function initHeartSystem() {
+    function initHeartSystem() {
       const today = getTodayString();
       const localKey = `alex_daily_heart_${today}`;
       const voted = localStorage.getItem(localKey) === 'true';
-
-      // Читаем количество сердечек из облака
-      const hearts = await callCloudCounter('hearts', false);
-      if (hearts !== null && hearts !== undefined) {
-        totalHearts = hearts;
-        localStorage.setItem('alex_cached_hearts', hearts);
-      } else {
-        totalHearts = parseInt(localStorage.getItem('alex_cached_hearts') || '0', 10);
-      }
-
-      document.getElementById('heart-counter').textContent = Number(totalHearts).toLocaleString('ru-RU');
       setHeartButtonState(voted);
     }
 
@@ -693,9 +646,7 @@
       localStorage.setItem(`alex_daily_heart_${today}`, 'true');
       setHeartButtonState(true);
 
-      // Сразу фиксируем в UI и сохраняем локально, чтобы цифра никуда не исчезала
-      totalHearts++;
-      localStorage.setItem('alex_cached_hearts', totalHearts);
+      totalHearts += 1;
       document.getElementById('heart-counter').textContent = Number(totalHearts).toLocaleString('ru-RU');
 
       if (window.confetti) {
@@ -724,16 +675,15 @@
       playHeartChime();
       showToast("Твое сердце принято! Спасибо за поддержку ❤️", true);
 
-      // Отправляем +1 в глобальное облако
-      const updatedValue = await callCloudCounter('hearts', true);
-      if (updatedValue !== null && updatedValue !== undefined) {
-        totalHearts = updatedValue;
-        localStorage.setItem('alex_cached_hearts', updatedValue);
-        document.getElementById('heart-counter').textContent = Number(updatedValue).toLocaleString('ru-RU');
+      // Синхронизация с Supabase
+      try {
+        await supabase.from('stats').update({ hearts: totalHearts }).eq('id', 'main');
+      } catch (e) {
+        console.error("Ошибка сохранения лайка в Supabase:", e);
       }
     }
 
-    /* 5. PC STATUS LOGIC */
+    /* PC STATUS */
     function updatePcStatusDisplay(isOnline, customDetail = null, isPlayingGame = null) {
       const pill = document.getElementById('desktop-indicator-pill');
       const dot = document.getElementById('desktop-status-dot');
@@ -768,7 +718,7 @@
       }
     }
 
-    /* 6. SPOTIFY */
+    /* SPOTIFY */
     function formatTime(ms) {
       if (!ms || isNaN(ms)) return "00:00";
       const totalSec = Math.floor(ms / 1000);
@@ -839,7 +789,7 @@
       }
     }, 1000);
 
-    /* 7. LANYARD DISCORD REAL-TIME */
+    /* LANYARD DISCORD REAL-TIME */
     function handleLanyardData(data) {
       if (!data) return;
 
@@ -910,9 +860,7 @@
             }));
           }
 
-          if (op === 0) {
-            handleLanyardData(d);
-          }
+          if (op === 0) handleLanyardData(d);
         };
 
         lanyardSocket.onerror = () => pollLanyardRest();
@@ -926,14 +874,12 @@
       try {
         const res = await fetch(`https://api.lanyard.rest/v1/users/${MY_DISCORD_ID}`);
         const json = await res.json();
-        if (json.success && json.data) {
-          handleLanyardData(json.data);
-        }
+        if (json.success && json.data) handleLanyardData(json.data);
       } catch (e) {}
     }
 
     window.onload = function() {
-      initPageViews();
+      initStats();
       initHeartSystem();
       renderSpotify(null);
       connectLanyard();

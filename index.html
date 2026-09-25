@@ -5,18 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ALEX // CYBER BIO & LIVE STATUS</title>
   
-  <!-- Google Fonts: Orbitron, Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@600;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Canvas Confetti for Heart Bursts -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
   <script>
@@ -163,21 +156,18 @@
 
     <!-- Right Controls -->
     <div class="flex items-center gap-2">
-      <!-- REAL TOTAL VIEWS COUNTER -->
       <div class="px-3 py-1.5 rounded-full text-xs font-mono border border-cyan-500/30 bg-cyan-950/30 text-neonCyan flex items-center gap-2 shadow-[0_0_15px_-4px_rgba(0,243,255,0.25)]">
         <i class="fa-solid fa-eye text-[11px] animate-pulse"></i>
         <span>ПРОСМОТРЫ:</span>
         <span id="global-views-count" class="font-bold text-white tracking-wider">...</span>
       </div>
 
-      <!-- Lanyard Discord Server Info -->
       <a href="https://discord.gg/lanyard" target="_blank" title="Чтобы бот транслировал ПК онлайн, вступи на сервер Lanyard" class="hidden sm:flex px-3 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900/80 hover:border-discordBlurple text-slate-400 hover:text-slate-200 transition items-center gap-1.5">
         <i class="fa-brands fa-discord text-discordBlurple text-sm"></i>
         <span>Lanyard Sync</span>
         <i class="fa-solid fa-arrow-up-right-from-square text-[9px] text-slate-500"></i>
       </a>
 
-      <!-- SFX Toggle -->
       <button id="sfx-toggle" onclick="toggleAudio()" class="px-3 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900/80 hover:border-neonCyan transition flex items-center gap-2 text-slate-300">
         <i id="sfx-icon" class="fa-solid fa-volume-high text-neonCyan"></i>
         <span id="sfx-status" class="hidden md:inline">SFX: ON</span>
@@ -188,17 +178,15 @@
   <!-- Main Bento Grid Container -->
   <main class="w-full max-w-5xl z-10 flex flex-col gap-6">
 
-    <!-- Top Bento: Profile & Real Daily Heart Card -->
+    <!-- Top Bento: Profile & Heart Card -->
     <div class="bento-card rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 border-l-4 border-l-neonCyan shadow-neon-cyan relative">
       <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
-        <!-- Avatar with neon glow & Real-time Discord Status Ring -->
         <div class="relative group">
           <div id="avatar-glow-ring" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl p-1 bg-gradient-to-tr from-slate-700 via-slate-800 to-slate-900 transition-all duration-500">
             <div class="w-full h-full bg-[#0d101a] rounded-xl flex items-center justify-center overflow-hidden border border-white/10">
               <img id="user-avatar" src="https://placehold.co/150x150/090b10/00f3ff?text=DISCORD" alt="Avatar" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
             </div>
           </div>
-          <!-- Real-time Discord Status Dot on Avatar -->
           <div id="avatar-status-badge" class="absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-black/90 border border-slate-700 text-slate-400 text-[10px] font-mono px-2.5 py-0.5 rounded-full flex items-center gap-1.5 whitespace-nowrap shadow-md">
             <span id="avatar-status-indicator" class="w-2 h-2 rounded-full bg-slate-600"></span>
             <span id="avatar-status-text">OFFLINE</span>
@@ -216,7 +204,6 @@
             Слушаю музыку на репите, играю в катки с друзьями и собираю крутые интерфейсы.
           </p>
 
-          <!-- Quick Copy Contacts -->
           <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-4">
             <button onclick="copyData('@alex_tg', 'Telegram')" class="group px-3 py-1.5 rounded-lg bg-slate-900/80 hover:bg-cyan-950/50 border border-slate-700 hover:border-neonCyan text-xs font-mono text-slate-300 hover:text-white transition flex items-center gap-2">
               <i class="fa-brands fa-telegram text-sky-400"></i>
@@ -241,7 +228,7 @@
 
       <!-- DAILY HEART WIDGET -->
       <div id="heart-widget-area" class="relative flex flex-col items-center justify-center gap-2 w-full md:w-60 pt-4 md:pt-0 border-t md:border-t-0 border-slate-800">
-        <button id="heart-btn" onclick="sendDailyHeart(event)" class="relative w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-neonRed/20 via-pink-950/40 to-purple-900/30 border border-neonRed/40 hover:border-neonRed text-white font-cyber text-xs tracking-wider flex items-center justify-center gap-2.5 hover:shadow-neon-heart transition-all duration-300 group active:scale-95">
+        <button id="heart-btn" onclick="sendDailyHeart(event)" class="relative w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-neonRed/20 via-pink-950/40 to-purple-900/30 border border-neonRed/40 hover:border-neonRed text-white font-cyber text-xs tracking-wider flex items-center justify-center gap-2.5 hover:shadow-neon-heart transition-all duration-300 group active:scale-95 cursor-pointer">
           <i id="heart-icon" class="fa-solid fa-heart text-neonRed text-base transition-transform group-hover:scale-125 duration-300"></i>
           <span id="heart-btn-text">ОТДАТЬ СЕРДЦЕ</span>
           <span id="heart-counter" class="bg-black/70 border border-neonRed/40 px-2.5 py-0.5 rounded text-neonRed font-mono font-bold text-xs shadow-inner">
@@ -251,7 +238,7 @@
 
         <div id="heart-subtext" class="text-[11px] font-mono text-center text-slate-400 transition-colors flex items-center gap-1.5">
           <i class="fa-solid fa-shield-halved text-[10px] text-neonRed"></i>
-          <span id="heart-status-message">1 сердце в день с одного IP</span>
+          <span id="heart-status-message">1 сердце в день</span>
         </div>
       </div>
     </div>
@@ -461,11 +448,9 @@
     <span id="toast-message">Скопировано!</span>
   </div>
 
-  <!-- Application Main Script -->
   <script>
     const MY_DISCORD_ID = "522679452447277056";
-    // Уникальное имя твоего проекта для сохранения данных в облаке
-    const COUNTER_NAMESPACE = "hitlegion_cyber_bio_prod";
+    const APP_ID = "hitlegion_cyber_stats";
 
     let sfxEnabled = true;
     let audioCtx = null;
@@ -475,16 +460,12 @@
 
     let totalViews = 0;
     let totalHearts = 0;
-
-    let visitorIP = "loading";
     let hasVotedToday = false;
     let countdownInterval = null;
 
     /* 1. AUDIO */
     function initAudio() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }
 
     function playTone(freq, type = 'sine', duration = 0.08, gainVal = 0.15) {
@@ -562,37 +543,74 @@
       }
     }
 
-    /* 3. CLOUD COUNTER (ПРОСМОТРЫ И СЕРДЕЧКИ БЕЗ СЕРВЕРА) */
-    async function apiRequest(key, action = 'get') {
-      try {
-        const url = action === 'up' 
-          ? `https://api.counterapi.dev/v1/${COUNTER_NAMESPACE}/${key}/up`
-          : `https://api.counterapi.dev/v1/${COUNTER_NAMESPACE}/${key}`;
-        const res = await fetch(url);
-        const data = await res.json();
-        return typeof data.count === 'number' ? data.count : 0;
-      } catch (err) {
-        return null;
-      }
+    /* 3. НАДЕЖНЫЙ СЕРВЕРНЫЙ СЧЕТЧИК БЕЗ CORS-ОШИБОК (JSONP / FETCH FALLBACK) */
+    function callCloudCounter(key, isHit = false) {
+      return new Promise((resolve) => {
+        const action = isHit ? 'hit' : 'get';
+        const cbName = `c_api_${action}_${key}_${Math.floor(Math.random() * 100000)}`;
+        const script = document.createElement('script');
+        let done = false;
+
+        window[cbName] = function(data) {
+          if (done) return;
+          done = true;
+          try { delete window[cbName]; } catch(e){}
+          script.remove();
+          if (data && typeof data.value === 'number') {
+            resolve(data.value);
+          } else {
+            resolve(null);
+          }
+        };
+
+        script.src = `https://api.countapi.xyz/${action}/${APP_ID}/${key}?callback=${cbName}`;
+        
+        script.onerror = function() {
+          if (done) return;
+          done = true;
+          try { delete window[cbName]; } catch(e){}
+          script.remove();
+          // Fallback через прямой fetch
+          fetch(`https://api.countapi.xyz/${action}/${APP_ID}/${key}`)
+            .then(r => r.json())
+            .then(d => resolve(d.value || null))
+            .catch(() => resolve(null));
+        };
+
+        setTimeout(() => {
+          if (!done) {
+            done = true;
+            try { delete window[cbName]; } catch(e){}
+            script.remove();
+            resolve(null);
+          }
+        }, 3500);
+
+        document.head.appendChild(script);
+      });
     }
 
+    /* ПРОСМОТРЫ */
     async function initPageViews() {
       const sessionCounted = sessionStorage.getItem('alex_view_counted');
-      let views = 0;
+      let views = null;
 
       if (!sessionCounted) {
         sessionStorage.setItem('alex_view_counted', 'true');
-        views = await apiRequest('views', 'up');
+        views = await callCloudCounter('views', true); // +1 в облаке
       } else {
-        views = await apiRequest('views', 'get');
+        views = await callCloudCounter('views', false); // просто получить текущее
       }
 
       if (views !== null && views !== undefined) {
         totalViews = views;
-        document.getElementById('global-views-count').textContent = Number(views).toLocaleString('ru-RU');
+        localStorage.setItem('alex_cached_views', views);
       } else {
-        document.getElementById('global-views-count').textContent = '1';
+        // Если сеть тупит, берем из локального кэша
+        totalViews = parseInt(localStorage.getItem('alex_cached_views') || '1', 10);
       }
+
+      document.getElementById('global-views-count').textContent = Number(totalViews).toLocaleString('ru-RU');
     }
 
     /* 4. DAILY HEARTS & ANTI-CHEAT */
@@ -641,7 +659,7 @@
         btn.className = 'relative w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-neonRed/20 via-pink-950/40 to-purple-900/30 border border-neonRed/40 hover:border-neonRed text-white font-cyber text-xs tracking-wider flex items-center justify-center gap-2.5 hover:shadow-neon-heart transition-all duration-300 group active:scale-95 cursor-pointer';
         icon.className = 'fa-solid fa-heart text-neonRed text-base transition-transform group-hover:scale-125 duration-300';
         text.textContent = 'ОТДАТЬ СЕРДЦЕ';
-        document.getElementById('heart-status-message').textContent = '1 сердце в день с одного IP';
+        document.getElementById('heart-status-message').textContent = '1 сердце в день';
         if (countdownInterval) clearInterval(countdownInterval);
       }
     }
@@ -651,13 +669,16 @@
       const localKey = `alex_daily_heart_${today}`;
       const voted = localStorage.getItem(localKey) === 'true';
 
-      // Загружаем актуальное число лайков из облака
-      const hearts = await apiRequest('hearts', 'get');
+      // Читаем количество сердечек из облака
+      const hearts = await callCloudCounter('hearts', false);
       if (hearts !== null && hearts !== undefined) {
         totalHearts = hearts;
-        document.getElementById('heart-counter').textContent = Number(hearts).toLocaleString('ru-RU');
+        localStorage.setItem('alex_cached_hearts', hearts);
+      } else {
+        totalHearts = parseInt(localStorage.getItem('alex_cached_hearts') || '0', 10);
       }
 
+      document.getElementById('heart-counter').textContent = Number(totalHearts).toLocaleString('ru-RU');
       setHeartButtonState(voted);
     }
 
@@ -668,11 +689,13 @@
       }
 
       const today = getTodayString();
+      hasVotedToday = true;
       localStorage.setItem(`alex_daily_heart_${today}`, 'true');
       setHeartButtonState(true);
 
-      // Визуальный отклик сразу
+      // Сразу фиксируем в UI и сохраняем локально, чтобы цифра никуда не исчезала
       totalHearts++;
+      localStorage.setItem('alex_cached_hearts', totalHearts);
       document.getElementById('heart-counter').textContent = Number(totalHearts).toLocaleString('ru-RU');
 
       if (window.confetti) {
@@ -701,11 +724,12 @@
       playHeartChime();
       showToast("Твое сердце принято! Спасибо за поддержку ❤️", true);
 
-      // Отправляем в глобальное облако
-      const newCount = await apiRequest('hearts', 'up');
-      if (newCount !== null && newCount !== undefined) {
-        totalHearts = newCount;
-        document.getElementById('heart-counter').textContent = Number(newCount).toLocaleString('ru-RU');
+      // Отправляем +1 в глобальное облако
+      const updatedValue = await callCloudCounter('hearts', true);
+      if (updatedValue !== null && updatedValue !== undefined) {
+        totalHearts = updatedValue;
+        localStorage.setItem('alex_cached_hearts', updatedValue);
+        document.getElementById('heart-counter').textContent = Number(updatedValue).toLocaleString('ru-RU');
       }
     }
 
@@ -829,7 +853,6 @@
         if (game) playingGameName = game.name;
       }
 
-      // Всегда отдаем приоритет ПК: если комп онлайн — всегда "В СЕТИ (ПК ВКЛЮЧЕН)"
       if (isDesktop || isOnline) {
         let label = "В СЕТИ (ПК ВКЛЮЧЕН)";
         if (playingGameName) {
@@ -840,7 +863,6 @@
         updatePcStatusDisplay(false);
       }
 
-      // Аватарка и никнейм из Discord
       if (data.discord_user) {
         if (data.discord_user.avatar) {
           const avatarUrl = `https://cdn.discordapp.com/avatars/${data.discord_user.id}/${data.discord_user.avatar}.png?size=256`;
@@ -853,7 +875,6 @@
         }
       }
 
-      // Spotify
       if (data.listening_to_spotify && data.spotify) {
         activeSpotifyState = data.spotify;
         renderSpotify(data.spotify);

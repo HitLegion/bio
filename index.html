@@ -190,7 +190,6 @@
             <h1 id="user-name" class="text-2xl sm:text-3xl font-black font-cyber tracking-wider text-white">
               ZINETRI <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonCyan to-neonPink">dare</span>
             </h1>
-            <span class="bg-purple-950/60 text-neonPurple border border-purple-800/50 text-[10px] font-mono font-bold px-2 py-0.5 rounded uppercase">LVL. 99</span>
           </div>
           <p id="user-bio" class="text-slate-400 text-sm max-w-md">
             forever 8 lvl
@@ -235,7 +234,7 @@
       <div id="heart-widget-area" class="relative flex flex-col items-center justify-center gap-2 w-full md:w-60 pt-4 md:pt-0 border-t md:border-t-0 border-slate-800">
         <button id="heart-btn" class="relative w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-neonRed/20 via-pink-950/40 to-purple-900/30 border border-neonRed/40 hover:border-neonRed text-white font-cyber text-xs tracking-wider flex items-center justify-center gap-2.5 hover:shadow-neon-heart transition-all duration-300 group active:scale-95 cursor-pointer">
           <i id="heart-icon" class="fa-solid fa-heart text-neonRed text-base transition-transform group-hover:scale-125 duration-300"></i>
-          <span id="heart-btn-text">ОТДАТЬ СЕРДЦЕ</span>
+          <span id="heart-btn-text">Поставить Лайк</span>
           <span id="heart-counter" class="bg-black/70 border border-neonRed/40 px-2.5 py-0.5 rounded text-neonRed font-mono font-bold text-xs shadow-inner">
             0
           </span>
@@ -243,7 +242,7 @@
 
         <div id="heart-subtext" class="text-[11px] font-mono text-center text-slate-400 transition-colors flex items-center gap-1.5">
           <i class="fa-solid fa-shield-halved text-[10px] text-neonRed"></i>
-          <span id="heart-status-message">1 сердце в день</span>
+          <span id="heart-status-message">1 лайк в день</span>
         </div>
       </div>
     </div>
@@ -318,7 +317,7 @@
         <div>
           <div class="text-xs font-cyber tracking-wider text-neonPurple flex items-center justify-between mb-3">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-microchip"></i> МОЙ СЕЙЧАС СЕТАП
+              <i class="fa-solid fa-microchip"></i> MY SETUP
             </span>
             <span class="text-[10px] font-mono text-slate-500">RIG</span>
           </div>
@@ -575,7 +574,7 @@
         const remaining = getTimeUntilMidnight();
         const msgEl = document.getElementById('heart-status-message');
         if (msgEl) {
-          msgEl.innerHTML = `<span class="text-neonRed font-semibold">Сердце отправлено!</span> След. через: <span class="font-mono text-white font-bold">${remaining}</span>`;
+          msgEl.innerHTML = `<span class="text-neonRed font-semibold">лайк поставлен!</span> След. через: <span class="font-mono text-white font-bold">${remaining}</span>`;
         }
       };
       updateMsg();
@@ -598,8 +597,8 @@
         btn.disabled = false;
         btn.className = 'relative w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-neonRed/20 via-pink-950/40 to-purple-900/30 border border-neonRed/40 hover:border-neonRed text-white font-cyber text-xs tracking-wider flex items-center justify-center gap-2.5 hover:shadow-neon-heart transition-all duration-300 group active:scale-95 cursor-pointer';
         icon.className = 'fa-solid fa-heart text-neonRed text-base transition-transform group-hover:scale-125 duration-300';
-        text.textContent = 'ОТДАТЬ СЕРДЦЕ';
-        document.getElementById('heart-status-message').textContent = '1 сердце в день';
+        text.textContent = 'ПОСТАВИТЬ ЛАЙК';
+        document.getElementById('heart-status-message').textContent = '1 лайк в день';
         if (countdownInterval) clearInterval(countdownInterval);
       }
     }
@@ -613,7 +612,7 @@
 
     async function sendDailyHeart(event) {
       if (hasVotedToday) {
-        showToast("Вы уже отдали свое сердце сегодня! Возвращайтесь завтра ❤️");
+        showToast("Вы уже отдали свой лайк сегодня! Возвращайтесь завтра ❤️");
         return;
       }
 
@@ -649,7 +648,7 @@
       }
 
       playHeartChime();
-      showToast("Твое сердце принято! Спасибо за поддержку ❤️", true);
+      showToast("Пасиб за лайк ❤️", true);
 
       try {
         await fetch(SUPABASE_URL, {
